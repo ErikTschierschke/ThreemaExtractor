@@ -1,7 +1,7 @@
 package de.hsmw.threemaextractor.service.data.message;
 
 import de.hsmw.threemaextractor.service.main.CryptUtils;
-import de.hsmw.threemaextractor.service.main.MasterKey;
+import de.hsmw.threemaextractor.service.file.MasterKey;
 
 import java.io.File;
 import java.io.FileInputStream;

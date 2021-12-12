@@ -7,7 +7,14 @@ import java.io.IOException;
 /**
  * utility class for checking and storing file locations
  */
-public class FileStore {
+public record FileStore(File masterKeyFile, File databaseFile, File preferencesFile, File mediaDir, File outputDir) {
+
+    /**
+     * initialize FileStore by given path strings
+     */
+    public FileStore(String masterKeyPath, String databasePath, String preferencesPath, String mediaDir, String outputDir) {
+        this(new File(masterKeyPath), new File(databasePath), new File(preferencesPath), new File(mediaDir), new File(outputDir));
+    }
 
     /**
      * check if a file is present

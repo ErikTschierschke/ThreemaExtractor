@@ -1,4 +1,4 @@
-package de.hsmw.threemaextractor.service.main;
+package de.hsmw.threemaextractor.service.file;
 
 import de.hsmw.threemaextractor.service.lib.ThreemaLib;
 
@@ -7,14 +7,19 @@ import java.io.IOException;
 
 public class MasterKey {
 
-    private final byte[] key;
+    private byte[] key;
 
     /**
      * Loads and deobfuscates master key from key.dat
      */
-    public MasterKey(File masterKeyFile) throws IOException, UnsupportedOperationException {
+    public MasterKey(File masterKeyFile) {
 
-        key = ThreemaLib.readKeyFromFile(masterKeyFile);
+        try {
+            key = ThreemaLib.readKeyFromFile(masterKeyFile);
+        } catch (IOException e) {
+            System.err.println("ERROR READING MASTER KEY.");
+            e.printStackTrace();
+        }
     }
 
 

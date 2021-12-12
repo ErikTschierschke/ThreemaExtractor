@@ -1,14 +1,19 @@
 package de.hsmw.threemaextractor.service.db;
 
 import de.hsmw.threemaextractor.service.data.Contact;
+import de.hsmw.threemaextractor.service.data.ContactAvatarFile;
 import de.hsmw.threemaextractor.service.data.ContactStore;
 import de.hsmw.threemaextractor.service.data.group.Group;
+import de.hsmw.threemaextractor.service.data.group.GroupAvatarFile;
 import de.hsmw.threemaextractor.service.data.group.GroupStore;
 import de.hsmw.threemaextractor.service.data.message.*;
 import de.hsmw.threemaextractor.service.main.JsonUtils;
+import de.hsmw.threemaextractor.service.file.MasterKey;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,12 +25,17 @@ public class DataFetcher {
     private final ContactStore contactStore;
     private final DirectMessageStore directMessageStore;
     private final GroupStore groupStore;
+    private final MasterKey masterKey;
+    private final File mediaDir;
 
-    public DataFetcher(Connection connection, ContactStore contactStore, DirectMessageStore messageStore, GroupStore groupStore) {
+    public DataFetcher(Connection connection, ContactStore contactStore, DirectMessageStore messageStore, GroupStore groupStore,
+                       MasterKey masterKey, File mediaDir) {
         this.connection = connection;
         this.contactStore = contactStore;
         this.directMessageStore = messageStore;
         this.groupStore = groupStore;
+        this.masterKey = masterKey;
+        this.mediaDir = mediaDir;
     }
 
     public void fetchAll() throws SQLException {
@@ -44,6 +54,23 @@ public class DataFetcher {
 
         while (results.next()) {
 
+            String identity = results.getString("identity");
+
+            // try to retrieve contact avatar file
+            ContactAvatarFile avatarFile = null;
+            if (!identity.equals("ECHOECHO")) {
+                try {
+                    
+                    avatarFile = new ContactAvatarFile(ContactAvatarFile.getFileByIdentity(mediaDir, identity, false),
+                            masterKey);
+                } catch (IOException e) {
+
+                    System.out.println("[WARNING] Avatar for contact \"" + results.getString("publicNickName") + "\"" +
+                            " was not found. The file was either deleted or the contact didn't set an avatar.");
+                }
+            }
+
+
             Contact contact = new Contact(
                     results.getString("identity"),
                     results.getString("firstName"),
@@ -51,7 +78,8 @@ public class DataFetcher {
                     results.getString("publicNickName"),
                     results.getString("androidContactId"),
                     results.getInt("verificationLevel"),
-                    results.getBoolean("isHidden"));
+                    results.getBoolean("isHidden"),
+                    avatarFile);
 
             contactStore.add(contact);
         }
@@ -186,12 +214,22 @@ public class DataFetcher {
             GroupMessageStore groupMessageStore = new GroupMessageStore();
             addMessagesToStore(messageResults, groupMessageStore);
 
+            //try to retrieve group avatar
+            GroupAvatarFile avatarFile = null;
+            try {
+                avatarFile = new GroupAvatarFile(GroupAvatarFile.getFileNameByGroupId(mediaDir, id), masterKey);
+            } catch (IOException e) {
+                System.out.println("[WARNING] Avatar for group\"" + groupsResults.getString("name") + "\" was not found." +
+                        " The file was either deleted or the group has no avatar set.");
+            }
+
             groupStore.add(new Group(
                     id,
                     groupsResults.getString("name"),
                     groupsResults.getString("creatorIdentity"),
                     members,
-                    groupMessageStore
+                    groupMessageStore,
+                    avatarFile
             ));
 
         }

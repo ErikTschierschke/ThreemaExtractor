@@ -1,6 +1,6 @@
 package de.hsmw.threemaextractor.service.db;
 
-import de.hsmw.threemaextractor.service.main.MasterKey;
+import de.hsmw.threemaextractor.service.file.MasterKey;
 
 import java.io.File;
 import java.sql.Connection;
@@ -9,9 +9,9 @@ import java.sql.SQLException;
 
 public class SqlCipherHandler {
 
-    private Connection connection;
     private final File mainDBFile;
     private final MasterKey masterKey;
+    private Connection connection;
 
     public SqlCipherHandler(File mainDBFile, MasterKey masterKey) {
         this.mainDBFile = mainDBFile;

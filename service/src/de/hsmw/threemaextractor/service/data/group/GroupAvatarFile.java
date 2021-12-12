@@ -1,7 +1,7 @@
 package de.hsmw.threemaextractor.service.data.group;
 
 import de.hsmw.threemaextractor.service.data.AbstractAvatarFile;
-import de.hsmw.threemaextractor.service.main.MasterKey;
+import de.hsmw.threemaextractor.service.file.MasterKey;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +16,7 @@ public class GroupAvatarFile extends AbstractAvatarFile {
     /**
      * get the avatar file associated with group id
      */
-    public static File getFileNameByGroupId(String mediaDir, int groupId) throws FileNotFoundException {
+    public static File getFileNameByGroupId(File mediaDir, int groupId) throws FileNotFoundException {
         File file = new File(mediaDir, ".grp-avatar/.grp-avatar-" + groupId);
 
         if (!file.exists()) {

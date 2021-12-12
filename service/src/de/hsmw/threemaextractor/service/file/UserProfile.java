@@ -1,4 +1,4 @@
-package de.hsmw.threemaextractor.service.main;
+package de.hsmw.threemaextractor.service.file;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,20 +17,27 @@ import java.nio.file.Files;
 public class UserProfile {
 
     private String phoneNumber;
-    private String threemaId;
+    private String identity;
     private String nickname;
     private String eMail;
 
-    public UserProfile(File appPreferencesFile) throws ParserConfigurationException, IOException, SAXException {
+    public UserProfile(File appPreferencesFile) {
 
-        // threema safe hash contains illegal XML chars, remove it
-        String appPreferences = Files.readString(appPreferencesFile.toPath())
-                .replaceAll("(.*(pref_threema_safe_hash_string).*)", "");
 
-        // load XML file
-        Document document = DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder()
-                .parse(new InputSource(new StringReader(appPreferences)));
+        String appPreferences = null;
+        Document document = null;
+        try {
+            // threema safe hash contains illegal XML chars, remove it
+            appPreferences = Files.readString(appPreferencesFile.toPath())
+                    .replaceAll("(.*(pref_threema_safe_hash_string).*)", "");
+
+            // load XML file
+            document = DocumentBuilderFactory.newInstance()
+                    .newDocumentBuilder()
+                    .parse(new InputSource(new StringReader(appPreferences)));
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            e.printStackTrace();
+        }
         document.normalize();
         NodeList items = document.getFirstChild().getChildNodes();
 
@@ -42,7 +49,7 @@ public class UserProfile {
                 if (item.getAttribute("name").equals("linked_mobile"))
                     phoneNumber = item.getTextContent();
                 if (item.getAttribute("name").equals("identity"))
-                    threemaId = item.getTextContent();
+                    identity = item.getTextContent();
                 if (item.getAttribute("name").equals("nickname"))
                     nickname = item.getTextContent();
                 if (item.getAttribute("name").equals("linked_email"))
@@ -56,8 +63,8 @@ public class UserProfile {
         return phoneNumber;
     }
 
-    public String getThreemaId() {
-        return threemaId;
+    public String getIdentity() {
+        return identity;
     }
 
     public String getNickname() {

@@ -1,10 +1,10 @@
 package de.hsmw.threemaextractor.service.data;
 
 import de.hsmw.threemaextractor.service.main.CryptUtils;
-import de.hsmw.threemaextractor.service.main.MasterKey;
+import de.hsmw.threemaextractor.service.file.MasterKey;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,19 +12,20 @@ import java.io.IOException;
 
 public abstract class AbstractAvatarFile {
 
-    private final byte[] avatarData;
+    private final RenderedImage avatar;
 
     public AbstractAvatarFile(File avatarFile, MasterKey masterKey) throws IOException {
-        avatarData = CryptUtils.getCipherInputStream(
-                new FileInputStream(avatarFile), masterKey).readAllBytes();
+        avatar = ImageIO.read(new ByteArrayInputStream(
+                CryptUtils.getCipherInputStream(
+                        new FileInputStream(avatarFile), masterKey).readAllBytes()
+        ));
     }
 
-    public BufferedImage getAvatarImage() {
-        try {
-            return ImageIO.read(new ByteArrayInputStream(avatarData));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public RenderedImage getAvatar() {
+        return avatar;
+    }
+
+    public void writeToFile(File outputDir, String filePath) throws IOException {
+        ImageIO.write(avatar, "jpg", new File(outputDir, filePath));
     }
 }

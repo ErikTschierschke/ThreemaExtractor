@@ -10,5 +10,5 @@ import java.util.HashMap;
  * members stores (memberIdentity, isActive)
  */
 public record Group(int id, String name, String creatorIdentity, HashMap<String, Boolean> members,
-                    GroupMessageStore messages) {
+                    GroupMessageStore messages, GroupAvatarFile groupAvatarFile) {
 }

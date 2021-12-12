@@ -1,5 +1,7 @@
 package de.hsmw.threemaextractor.service.main;
 
+import de.hsmw.threemaextractor.service.file.MasterKey;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.NoSuchPaddingException;

@@ -6,5 +6,5 @@ package de.hsmw.threemaextractor.service.data;
  */
 public record Contact(String identity, String firstName, String lastName,
                       String nickname, String androidContactId, int verificationLevel,
-                      boolean isHidden) {
+                      boolean isHidden, ContactAvatarFile contactAvatarFile) {
 }

@@ -5,7 +5,7 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import de.hsmw.threemaextractor.service.main.ChatVisualizer;
 import de.hsmw.threemaextractor.service.main.FileStore;
-import de.hsmw.threemaextractor.service.main.MainDatabase;
+import de.hsmw.threemaextractor.service.file.MainDatabase;
 import de.hsmw.threemaextractor.service.main.ThreemaExtractor;
 
 

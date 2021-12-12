@@ -2,12 +2,18 @@ package de.hsmw.threemaextractor.service.main;
 
 import de.hsmw.threemaextractor.service.data.Contact;
 import de.hsmw.threemaextractor.service.data.ContactStore;
+import de.hsmw.threemaextractor.service.file.UserProfile;
+import de.hsmw.threemaextractor.service.data.group.Group;
 import de.hsmw.threemaextractor.service.data.message.*;
+import de.hsmw.threemaextractor.service.file.MainDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+/**
+ * turns {@link IMessageStore} into readable chat representation
+ */
 public class ChatVisualizer {
 
     private final String userName;
@@ -16,6 +22,14 @@ public class ChatVisualizer {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM. HH:mm");
 
+    /**
+     * @param userName       user name used for outgoing messages (e.g. {@link UserProfile#getNickname()})
+     * @param contactStore   the {@link ContactStore} retrieved from the database ({@link MainDatabase#getContacts()})
+     * @param useCustomNames <b>true:</b> use user specified first + last names
+     *                       <b>false:</b> use nicknames (specified by contacts)
+     * @param useLocalTime   <b>true:</b> timestamps in "Europe/Berlin" time -
+     *                       <b>false:</b> timestamps in UTC
+     */
     public ChatVisualizer(String userName, ContactStore contactStore, boolean useCustomNames, boolean useLocalTime) {
         this.userName = userName;
         this.useCustomNames = useCustomNames;
@@ -28,12 +42,18 @@ public class ChatVisualizer {
     }
 
     /**
-     * if no userName is provided, use "Suspect"
+     * if no userName is provided, "Suspect" is used
      */
     public ChatVisualizer(ContactStore contactStore, boolean useCustomNames, boolean useLocalTime) {
         this("Suspect", contactStore, useCustomNames, useLocalTime);
     }
 
+    /**
+     * visualizes a direct chat
+     *
+     * @param directMessageStore the {@link DirectMessageStore} retireved from database ({@link MainDatabase#getDirectMessages()})
+     * @param partnerId          Threema ID of the chat partner
+     */
     public String visualizeDirectConversation(DirectMessageStore directMessageStore, String partnerId) {
         StringBuilder conversation = new StringBuilder();
         TreeSet<IMessage> messages = directMessageStore.getByIdentity(partnerId);
@@ -45,6 +65,11 @@ public class ChatVisualizer {
         return conversation.toString();
     }
 
+    /**
+     * visualizes a group chat
+     *
+     * @param groupMessageStore a {@link GroupMessageStore} ({@link Group#messages()})
+     */
     public String visualizeGroupConversation(GroupMessageStore groupMessageStore) {
         StringBuilder conversation = new StringBuilder();
         TreeSet<IMessage> messages = groupMessageStore.getMessages();
@@ -56,6 +81,9 @@ public class ChatVisualizer {
         return conversation.toString();
     }
 
+    /**
+     * turns a single {@link IMessage} into a readable String
+     */
     public String messageToString(IMessage message) {
         String msg;
         if (message.isOutgoing()) {
