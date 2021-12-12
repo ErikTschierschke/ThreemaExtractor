@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test
+Bundle-SymbolicName: de.hsmw.ThreemaExtractor.test;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Hochschule Mittweida
+Require-Bundle: org.eclipse.core.runtime,
+ de.hsmw.ThreemaExtractor.service;bundle-version="1.0.0"
+Automatic-Module-Name: de.hsmw.ThreemaExtractor.test
+Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-ClassPath: res/,
+ .
