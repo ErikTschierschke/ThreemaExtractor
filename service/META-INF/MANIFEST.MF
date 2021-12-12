@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Service
+Bundle-SymbolicName: de.hsmw.ThreemaExtractor.service;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Hochschule Mittweida
+Require-Bundle: org.eclipse.core.runtime
+Automatic-Module-Name: de.hsmw.ThreemaExtractor.service
+Bundle-RequiredExecutionEnvironment: JavaSE-16
+Import-Package: javax.xml.parsers,
+ org.xml.sax,
+ org.w3c.dom,
+ javax.json,
+ javax.imageio,
+ javax.crypto
