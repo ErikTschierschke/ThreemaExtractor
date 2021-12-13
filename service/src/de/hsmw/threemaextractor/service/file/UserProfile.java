@@ -1,5 +1,7 @@
 package de.hsmw.threemaextractor.service.file;
 
+import de.hsmw.threemaextractor.service.data.ContactAvatar;
+import de.hsmw.threemaextractor.service.main.FileStore;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,14 +16,25 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 
+/**
+ * represents information parsed from app preferences file
+ */
 public class UserProfile {
 
     private String phoneNumber;
     private String identity;
     private String nickname;
     private String eMail;
+    private ContactAvatar userAvatar;
 
-    public UserProfile(File appPreferencesFile) {
+    /**
+     * parse information from app preferences file
+     *
+     * @param appPreferencesFile app preferences file (see {@link FileStore#preferencesFile()})
+     * @param masterKey master key
+     * @param mediaDir media directory (see {@link FileStore#mediaDir()})
+     */
+    public UserProfile(File appPreferencesFile, MasterKey masterKey, File mediaDir) {
 
 
         String appPreferences = null;
@@ -56,23 +69,50 @@ public class UserProfile {
                     eMail = item.getTextContent();
             }
         }
+
+        // try to get user avatar
+        try {
+            userAvatar = new ContactAvatar(ContactAvatar.getFileByIdentity(mediaDir, identity, true), masterKey);
+        } catch (IOException e) {
+            System.out.println("[WARNING] User avatar not found. It was either deleted or the user has no avatar set.");
+            userAvatar = null;
+        }
     }
 
 
+    /**
+     * @return the users phone number if he has set one, <b>null</b> if not
+     */
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    /**
+     * @return the users threema id
+     */
     public String getIdentity() {
         return identity;
     }
 
+    /**
+     * @return the nickname set by the user
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * @return the users e-mail if he has set one, <b>null</b> if not
+     */
     public String getEMail() {
         return eMail;
     }
 
+    /**
+     * @return the users avatar, <b>null</b> if user has no avatar set
+     * @see ContactAvatar
+     */
+    public ContactAvatar getUserAvatar() {
+        return userAvatar;
+    }
 }

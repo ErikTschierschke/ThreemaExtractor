@@ -6,11 +6,15 @@ import de.hsmw.threemaextractor.service.data.message.DirectMessageStore;
 import de.hsmw.threemaextractor.service.db.DataFetcher;
 import de.hsmw.threemaextractor.service.db.SqlCipherHandler;
 import de.hsmw.threemaextractor.service.file.MasterKey;
+import de.hsmw.threemaextractor.service.main.FileStore;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * representation main database (decrypted and parsed)
+ */
 public class MainDatabase {
 
     private final SqlCipherHandler sqlCipherHandler;
@@ -20,6 +24,12 @@ public class MainDatabase {
     private final GroupStore groupStore = new GroupStore();
     private Connection connection;
 
+    /**
+     * initialize database connection, decrypt and parse
+     * @param mainDBFile main database file (see {@link FileStore#databaseFile()})
+     * @param masterKey master key
+     * @param mediaDir media directory (see {@link FileStore#mediaDir()})
+     */
     public MainDatabase(File mainDBFile, MasterKey masterKey, File mediaDir) {
 
         sqlCipherHandler = new SqlCipherHandler(mainDBFile, masterKey);
@@ -40,14 +50,26 @@ public class MainDatabase {
         }
     }
 
+    /**
+     * @return parsed Threema contacts
+     * @see ContactStore
+     */
     public ContactStore getContacts() {
         return contactStore;
     }
 
+    /**
+     * @return parsed direct messages
+     * @see DirectMessageStore
+     */
     public DirectMessageStore getDirectMessages() {
         return messageStore;
     }
 
+    /**
+     * @return parsed groups
+     * @see GroupStore
+     */
     public GroupStore getGroups() {
         return groupStore;
     }

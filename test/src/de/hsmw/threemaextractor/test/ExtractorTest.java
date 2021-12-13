@@ -1,11 +1,15 @@
 package de.hsmw.threemaextractor.test;
 
+import java.util.Iterator;
+
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import de.hsmw.threemaextractor.service.main.ChatVisualizer;
 import de.hsmw.threemaextractor.service.main.FileStore;
+import de.hsmw.threemaextractor.service.data.group.Group;
 import de.hsmw.threemaextractor.service.file.MainDatabase;
+import de.hsmw.threemaextractor.service.file.UserProfile;
 import de.hsmw.threemaextractor.service.main.ThreemaExtractor;
 
 
@@ -16,7 +20,7 @@ public class ExtractorTest implements IApplication {
 		
 
 		FileStore fileStore = new FileStore(
-				"res/key.dat", "res/threema4.db", "res/ch.threema.app_preferences.xml", "res/data/", "out/");
+				"res/self/files/key.dat", "res/self/databases/threema4.db", "res/self/shared_prefs/ch.threema.app_preferences.xml", "res/data/", "out/");
 		
 		ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore);
 		
@@ -25,6 +29,13 @@ public class ExtractorTest implements IApplication {
 		ChatVisualizer chatVisualizer = new  ChatVisualizer(mainDatabase.getContacts(), true, true);
 		
 		System.out.println(chatVisualizer.visualizeDirectConversation(mainDatabase.getDirectMessages(), "XNYZKFYJ"));
+		
+		for (Group group : threemaExtractor.getMainDatabase().getGroups().getAll().values()) {
+			System.out.println(group.members());
+			
+		}
+		
+		System.out.println(threemaExtractor.getMainDatabase().getGroups());
 		
 		return IApplication.EXIT_OK;
 	}

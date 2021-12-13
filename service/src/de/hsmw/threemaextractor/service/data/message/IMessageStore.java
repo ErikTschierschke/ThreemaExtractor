@@ -1,7 +1,9 @@
 package de.hsmw.threemaextractor.service.data.message;
 
 /**
- * interface for DirectMessageStore and GroupMessageStore to implement add()
+ * interface for DirectMessageStore and GroupMessageStore
+ * @see DirectMessageStore
+ * @see GroupMessageStore
  */
 public interface IMessageStore {
 
