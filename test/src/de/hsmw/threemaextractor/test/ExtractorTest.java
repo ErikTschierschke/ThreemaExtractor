@@ -19,7 +19,7 @@ public class ExtractorTest implements IApplication {
 		
 
 		FileStore fileStore = new FileStore(
-				"res/self/files/key.dat", "res/self/databases/threema4.db", "res/self/shared_prefs/ch.threema.app_preferences.xml", "res/data/", "out/");
+				"res/key.dat", "res/threema4.db", "res/self/shared_prefs/ch.threema.app_preferences.xml", "res/data/", "out/");
 		
 		ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore);
 		
