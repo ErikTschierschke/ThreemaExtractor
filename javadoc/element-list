@@ -1,4 +1,5 @@
 de.hsmw.threemaextractor.service.data
+de.hsmw.threemaextractor.service.data.distribution_list
 de.hsmw.threemaextractor.service.data.group
 de.hsmw.threemaextractor.service.data.message
 de.hsmw.threemaextractor.service.file
