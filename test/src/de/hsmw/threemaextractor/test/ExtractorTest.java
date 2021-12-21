@@ -1,15 +1,14 @@
 package de.hsmw.threemaextractor.test;
 
-import java.util.Iterator;
-
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import de.hsmw.threemaextractor.service.main.ChatVisualizer;
 import de.hsmw.threemaextractor.service.main.FileStore;
+import de.hsmw.threemaextractor.service.data.distribution_list.DistributionList;
 import de.hsmw.threemaextractor.service.data.group.Group;
+import de.hsmw.threemaextractor.service.data.message.IMessage;
 import de.hsmw.threemaextractor.service.file.MainDatabase;
-import de.hsmw.threemaextractor.service.file.UserProfile;
 import de.hsmw.threemaextractor.service.main.ThreemaExtractor;
 
 
@@ -34,6 +33,13 @@ public class ExtractorTest implements IApplication {
 			System.out.println(group.members());
 			
 		}
+		System.out.println(mainDatabase.getDistributionListStore().getAll().values());
+		 for (DistributionList list : mainDatabase.getDistributionListStore().getAll().values()) {
+			 System.out.println(list.name() + "test");
+			 for (IMessage message : list.messages()) {
+				 System.out.println(message);
+			 }
+		 }
 		
 		System.out.println(threemaExtractor.getMainDatabase().getGroups());
 		

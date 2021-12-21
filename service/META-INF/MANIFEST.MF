@@ -13,6 +13,7 @@ Import-Package: javax.crypto,
  org.w3c.dom,
  org.xml.sax
 Export-Package: de.hsmw.threemaextractor.service.data;uses:="de.hsmw.threemaextractor.service.file",
+ de.hsmw.threemaextractor.service.data.distribution_list,
  de.hsmw.threemaextractor.service.data.group;uses:="de.hsmw.threemaextractor.service.file,de.hsmw.threemaextractor.service.data",
  de.hsmw.threemaextractor.service.data.message;uses:="de.hsmw.threemaextractor.service.file",
  de.hsmw.threemaextractor.service.db;

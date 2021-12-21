@@ -1,6 +1,7 @@
 package de.hsmw.threemaextractor.service.file;
 
 import de.hsmw.threemaextractor.service.data.ContactStore;
+import de.hsmw.threemaextractor.service.data.distribution_list.DistributionListStore;
 import de.hsmw.threemaextractor.service.data.group.GroupStore;
 import de.hsmw.threemaextractor.service.data.message.DirectMessageStore;
 import de.hsmw.threemaextractor.service.db.DataFetcher;
@@ -13,7 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * representation main database (decrypted and parsed)
+ * representation of main database (decrypted and parsed)
  */
 public class MainDatabase {
 
@@ -22,6 +23,7 @@ public class MainDatabase {
     private final ContactStore contactStore = new ContactStore();
     private final DirectMessageStore messageStore = new DirectMessageStore();
     private final GroupStore groupStore = new GroupStore();
+    private final DistributionListStore distributionListStore = new DistributionListStore();
     private Connection connection;
 
     /**
@@ -41,7 +43,8 @@ public class MainDatabase {
             e.printStackTrace();
         }
 
-        dataFetcher = new DataFetcher(connection, contactStore, messageStore, groupStore, masterKey, mediaDir);
+        dataFetcher = new DataFetcher(connection, contactStore, messageStore, groupStore, distributionListStore,
+                masterKey, mediaDir);
         try {
             dataFetcher.fetchAll();
         } catch (SQLException e) {
@@ -72,5 +75,13 @@ public class MainDatabase {
      */
     public GroupStore getGroups() {
         return groupStore;
+    }
+
+    /**
+     * @return parsed distribution lists
+     * @see DistributionListStore
+     */
+    public DistributionListStore getDistributionListStore() {
+        return distributionListStore;
     }
 }

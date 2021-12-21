@@ -1,7 +1,5 @@
 package de.hsmw.threemaextractor.service.data.message;
 
-import org.eclipse.swt.widgets.Tree;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -36,8 +34,8 @@ public class DirectMessageStore implements IMessageStore {
     /**
      * gets all direct messages
      */
-    public ArrayList<IMessage> getAll() {
-        ArrayList<IMessage> messageList = new ArrayList<>();
+    public TreeSet<IMessage> getAll() {
+        TreeSet<IMessage> messageList = new TreeSet<>();
 
         for (TreeSet<IMessage> set : messages.values()) {
             messageList.addAll(set);

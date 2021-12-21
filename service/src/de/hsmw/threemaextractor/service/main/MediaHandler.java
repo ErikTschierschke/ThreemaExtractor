@@ -91,7 +91,7 @@ public class MediaHandler {
 
             for (Group group : mainDatabase.getGroups().getAll().values()) {
                 // save group avatars
-                group.groupAvatarFile().writeToFile(outputDir, GROUP_AVATAR_DIR + group.name());
+                group.groupAvatar().writeToFile(outputDir, GROUP_AVATAR_DIR + group.name());
 
                 // save group media
                 for (IMessage message : group.messages().getMessages()) {

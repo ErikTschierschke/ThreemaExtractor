@@ -3,6 +3,8 @@ package de.hsmw.threemaextractor.service.db;
 import de.hsmw.threemaextractor.service.data.Contact;
 import de.hsmw.threemaextractor.service.data.ContactAvatar;
 import de.hsmw.threemaextractor.service.data.ContactStore;
+import de.hsmw.threemaextractor.service.data.distribution_list.DistributionList;
+import de.hsmw.threemaextractor.service.data.distribution_list.DistributionListStore;
 import de.hsmw.threemaextractor.service.data.group.Group;
 import de.hsmw.threemaextractor.service.data.group.GroupAvatar;
 import de.hsmw.threemaextractor.service.data.group.GroupStore;
@@ -25,15 +27,18 @@ public class DataFetcher {
     private final ContactStore contactStore;
     private final DirectMessageStore directMessageStore;
     private final GroupStore groupStore;
+    private final DistributionListStore distributionListStore;
+
     private final MasterKey masterKey;
     private final File mediaDir;
 
-    public DataFetcher(Connection connection, ContactStore contactStore, DirectMessageStore messageStore, GroupStore groupStore,
+    public DataFetcher(Connection connection, ContactStore contactStore, DirectMessageStore messageStore, GroupStore groupStore, DistributionListStore distributionListStore,
                        MasterKey masterKey, File mediaDir) {
         this.connection = connection;
         this.contactStore = contactStore;
         this.directMessageStore = messageStore;
         this.groupStore = groupStore;
+        this.distributionListStore = distributionListStore;
         this.masterKey = masterKey;
         this.mediaDir = mediaDir;
     }
@@ -43,6 +48,7 @@ public class DataFetcher {
         fetchContacts();
         fetchDirectMessages();
         fetchGroups();
+        fetchDistributionLists();
     }
 
     /**
@@ -230,6 +236,38 @@ public class DataFetcher {
                     avatarFile
             ));
 
+        }
+    }
+
+    /**
+     * fetch distribution lists
+     */
+    public void fetchDistributionLists() throws SQLException {
+
+        ResultSet results = connection.createStatement().executeQuery(Query.GET_ALL_DISTRIBUTION_LISTS);
+        while (results.next()) {
+            int id = results.getInt("id");
+            System.out.println(id);
+            // fetch members
+            ResultSet memberResults = connection.createStatement().executeQuery(String.format(Query.GET_MEMBERS_BY_DISTRIBUTION_LIST_ID, id));
+            HashMap<String, Boolean> members = new HashMap<>();
+            while (memberResults.next()) {
+                members.put(memberResults.getString("identity"), memberResults.getBoolean("isActive"));
+            }
+
+            // fetch messages
+            ResultSet messageResults = connection.createStatement().executeQuery(String.format(Query.GET_MESSAGES_BY_DISTRIBUTION_LIST_ID, id));
+            GroupMessageStore tempMessageStore = new GroupMessageStore();
+            addMessagesToStore(messageResults, tempMessageStore);
+
+            distributionListStore.add(new DistributionList(
+                    id,
+                    results.getString("name"),
+                    results.getString("createdAt"),
+                    members,
+                    tempMessageStore.getMessages()
+            ));
+            System.out.println(distributionListStore.getByName(results.getString("name")));
         }
     }
 
