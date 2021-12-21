@@ -10,6 +10,7 @@ import java.io.IOException;
 
 /**
  * represents group avatar
+ *
  * @see AbstractAvatar
  */
 public class GroupAvatar extends AbstractAvatar {
@@ -25,7 +26,7 @@ public class GroupAvatar extends AbstractAvatar {
      * returns the associated encrypted avatar file
      *
      * @param mediaDir media dir (see {@link FileStore#mediaDir()})
-     * @param groupId the ID of the desired group
+     * @param groupId  the ID of the desired group
      * @throws FileNotFoundException if the file is not present (group has no avatar set or file was deleted)
      */
     public static File getFileByGroupId(File mediaDir, int groupId) throws FileNotFoundException {

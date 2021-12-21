@@ -2,10 +2,10 @@ package de.hsmw.threemaextractor.service.main;
 
 import de.hsmw.threemaextractor.service.data.Contact;
 import de.hsmw.threemaextractor.service.data.ContactStore;
-import de.hsmw.threemaextractor.service.file.UserProfile;
 import de.hsmw.threemaextractor.service.data.group.Group;
 import de.hsmw.threemaextractor.service.data.message.*;
 import de.hsmw.threemaextractor.service.file.MainDatabase;
+import de.hsmw.threemaextractor.service.file.UserProfile;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;

@@ -26,13 +26,14 @@ public class UserProfile {
     private String nickname;
     private String eMail;
     private ContactAvatar userAvatar;
+    private String[] blockedList;
 
     /**
      * parse information from app preferences file
      *
      * @param appPreferencesFile app preferences file (see {@link FileStore#preferencesFile()})
-     * @param masterKey master key
-     * @param mediaDir media directory (see {@link FileStore#mediaDir()})
+     * @param masterKey          master key
+     * @param mediaDir           media directory (see {@link FileStore#mediaDir()})
      */
     public UserProfile(File appPreferencesFile, MasterKey masterKey, File mediaDir) {
 
@@ -67,6 +68,9 @@ public class UserProfile {
                     nickname = item.getTextContent();
                 if (item.getAttribute("name").equals("linked_email"))
                     eMail = item.getTextContent();
+                if (item.getAttribute("name").equals("identity_list_blacklist")) {
+                    blockedList = item.getTextContent().split(";");
+                }
             }
         }
 
@@ -114,5 +118,12 @@ public class UserProfile {
      */
     public ContactAvatar getUserAvatar() {
         return userAvatar;
+    }
+
+    /**
+     * @return list of Threema IDs blocked by the user
+     */
+    public String[] getBlockedList() {
+        return blockedList;
     }
 }

@@ -28,11 +28,10 @@ public class MediaHandler {
     private final UserProfile userProfile;
 
     /**
-     *
-     * @param mediaDir directory where media data is stored ({@code [ANDROID MEDIA DIR]/ch.threema.app/files/data/})
-     * @param masterKey the obtained {@link MasterKey}
+     * @param mediaDir     directory where media data is stored ({@code [ANDROID MEDIA DIR]/ch.threema.app/files/data/})
+     * @param masterKey    the obtained {@link MasterKey}
      * @param mainDatabase the obtained {@link MainDatabase}
-     * @param userProfile the obtained {@link UserProfile} information from the app preferences file
+     * @param userProfile  the obtained {@link UserProfile} information from the app preferences file
      */
     public MediaHandler(File mediaDir, MasterKey masterKey, MainDatabase mainDatabase, UserProfile userProfile) {
         this.mediaDir = mediaDir;
@@ -43,7 +42,7 @@ public class MediaHandler {
 
     /**
      * saves avatar files and media to the output directory<p><p>
-     *
+     * <p>
      * creates the following structure:<p>
      * <ul>
      *     <li>{@code avatars/user.jpg} - user avatar
@@ -54,23 +53,22 @@ public class MediaHandler {
      * </ul><p>
      * <b>unique file name</b>: {@code [4 chars of message uid] - [original file name]}<p>
      * (since file names may occur multiple times)
-     *
      */
     public void saveAllMedia(File outputDir) {
 
         try {
 
             // save user avatar if available
-        	if (userProfile.getUserAvatar() != null) {
-				userProfile.getUserAvatar().writeToFile(outputDir, AVATAR_DIR + "user");
-			}
-            
+            if (userProfile.getUserAvatar() != null) {
+                userProfile.getUserAvatar().writeToFile(outputDir, AVATAR_DIR + "user");
+            }
+
 
             // save contact avatars
             for (Contact contact : mainDatabase.getContacts().getAll()) {
-            	if (contact.contactAvatar() != null) {
-					contact.contactAvatar().writeToFile(outputDir, AVATAR_DIR + contact.nickname());
-				}
+                if (contact.contactAvatar() != null) {
+                    contact.contactAvatar().writeToFile(outputDir, AVATAR_DIR + contact.nickname());
+                }
             }
 
             // save media from direct messages

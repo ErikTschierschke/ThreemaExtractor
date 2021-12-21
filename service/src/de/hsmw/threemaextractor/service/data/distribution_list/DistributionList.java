@@ -11,11 +11,12 @@ import java.util.TreeSet;
 /**
  * distribution list data record
  *
- * @param id distribution list in database
- * @param name distribution list name
+ * @param id        distribution list in database
+ * @param name      distribution list name
  * @param createdAt creation timestamp in local time (format: {@code YYYY-MM-DD hh:mm:ss.SSS000})
- * @param members distribution list members in format {@code [Threema ID, isActive?]} (see {@link Group#members()})
- * @param messages set of messages (<i>Note</i> that these are redundantly saved in {@link MainDatabase#getDirectMessages()})
+ * @param members   distribution list members in format {@code [Threema ID, isActive?]} (see {@link Group#members()})
+ * @param messages  set of messages (<i>Note</i> that these are redundantly saved in {@link MainDatabase#getDirectMessages()})
  */
 public record DistributionList(int id, String name, String createdAt,
-                               HashMap<String, Boolean> members, TreeSet<IMessage> messages) { }
+                               HashMap<String, Boolean> members, TreeSet<IMessage> messages) {
+}

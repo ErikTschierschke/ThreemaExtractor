@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 /**
  * stores contacts from main database
+ *
  * @see MainDatabase#getContacts()
  */
 public class ContactStore {
@@ -15,6 +16,7 @@ public class ContactStore {
 
     /**
      * add a {@link Contact} to the store
+     *
      * @hidden
      */
     public void add(Contact contact) {

@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * text message data record<p>
- *
+ * <p>
  * for generic attributes see {@link IMessage}
  *
  * @param text the message content

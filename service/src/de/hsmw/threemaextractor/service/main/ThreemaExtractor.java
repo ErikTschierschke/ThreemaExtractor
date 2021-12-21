@@ -1,8 +1,8 @@
 package de.hsmw.threemaextractor.service.main;
 
-import de.hsmw.threemaextractor.service.file.UserProfile;
 import de.hsmw.threemaextractor.service.file.MainDatabase;
 import de.hsmw.threemaextractor.service.file.MasterKey;
+import de.hsmw.threemaextractor.service.file.UserProfile;
 
 /**
  * service entry point

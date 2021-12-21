@@ -4,12 +4,12 @@ import java.util.Date;
 
 /**
  * voip status message data record<p>
- *
+ * <p>
  * for generic attributes see {@link IMessage}
  *
- * @param status {@link Status} of the voip call
+ * @param status       {@link Status} of the voip call
  * @param rejectReason {@link RejectReason} of the voip call, <b>null</b> if {@code status} is not {@code REJECTED}
- * @param duration call duration in seconds, <b>-1</b> if {@code status} is not {@code FINISHED}
+ * @param duration     call duration in seconds, <b>-1</b> if {@code status} is not {@code FINISHED}
  */
 public record VoipMessage(String uid, String identity, boolean isOutgoing,
                           State state, Date utcSent, Date utcReceived, Date utcRead,
@@ -18,6 +18,7 @@ public record VoipMessage(String uid, String identity, boolean isOutgoing,
     /**
      * gets the call status by the status number from the database
      * see <a href="https://github.com/threema-ch/threema-android/blob/0b6543eafe325c37d25ae06e87802c5479bee099/app/src/main/java/ch/threema/storage/models/data/status/VoipStatusDataModel.java#L29">VoipStatusDataModel.java</a>
+     *
      * @hidden
      */
     public static Status getStatusByInt(int statusNumber) {
@@ -33,6 +34,7 @@ public record VoipMessage(String uid, String identity, boolean isOutgoing,
     /**
      * gets the reject reason from the reject reason number in the database
      * see <a href="https://github.com/threema-ch/threema-android/blob/0b6543eafe325c37d25ae06e87802c5479bee099/domain/src/main/java/ch/threema/domain/protocol/csp/messages/voip/VoipCallAnswerData.java#L176">RejectReason</a>
+     *
      * @hidden
      */
     public static RejectReason getRejectReasonByInt(int rejectReasonNumber) {

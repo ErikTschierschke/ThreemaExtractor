@@ -6,14 +6,16 @@ import java.util.HashMap;
 
 /**
  * stores distribution lists from main database
+ *
  * @see MainDatabase#getDistributionListStore()
  */
 public class DistributionListStore {
 
-    private final HashMap<String, DistributionList> distributionLists= new HashMap<>();
+    private final HashMap<String, DistributionList> distributionLists = new HashMap<>();
 
     /**
      * add distribution list
+     *
      * @hidden
      */
     public void add(DistributionList distributionList) {

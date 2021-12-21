@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 /**
  * stores messages for a group conversation
+ *
  * @see Group#messages()
  */
 public class GroupMessageStore implements IMessageStore {
@@ -14,6 +15,7 @@ public class GroupMessageStore implements IMessageStore {
 
     /**
      * adds a message
+     *
      * @hidden
      */
     @Override

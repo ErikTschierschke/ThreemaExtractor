@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 /**
  * stores groups from main database
+ *
  * @see MainDatabase#getGroups()
  */
 public class GroupStore {
@@ -14,6 +15,7 @@ public class GroupStore {
 
     /**
      * add a group to the store
+     *
      * @hidden
      */
     public void add(Group group) {

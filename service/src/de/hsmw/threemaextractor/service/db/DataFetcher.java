@@ -9,8 +9,8 @@ import de.hsmw.threemaextractor.service.data.group.Group;
 import de.hsmw.threemaextractor.service.data.group.GroupAvatar;
 import de.hsmw.threemaextractor.service.data.group.GroupStore;
 import de.hsmw.threemaextractor.service.data.message.*;
-import de.hsmw.threemaextractor.service.main.JsonUtils;
 import de.hsmw.threemaextractor.service.file.MasterKey;
+import de.hsmw.threemaextractor.service.main.JsonUtils;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -66,7 +66,7 @@ public class DataFetcher {
             ContactAvatar avatarFile = null;
             if (!identity.equals("ECHOECHO")) {
                 try {
-                    
+
                     avatarFile = new ContactAvatar(ContactAvatar.getFileByIdentity(mediaDir, identity, false),
                             masterKey);
                 } catch (IOException e) {

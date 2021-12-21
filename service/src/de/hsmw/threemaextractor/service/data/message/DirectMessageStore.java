@@ -1,6 +1,5 @@
 package de.hsmw.threemaextractor.service.data.message;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -13,6 +12,7 @@ public class DirectMessageStore implements IMessageStore {
 
     /**
      * adds a message
+     *
      * @hidden
      */
     @Override
@@ -25,6 +25,7 @@ public class DirectMessageStore implements IMessageStore {
 
     /**
      * gets a direct conversation by the partners Threema ID
+     *
      * @return the direct messages with the partner as {@code TreeSet}
      */
     public TreeSet<IMessage> getByIdentity(String identity) {

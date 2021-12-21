@@ -1,8 +1,8 @@
 package de.hsmw.threemaextractor.service.data;
 
+import de.hsmw.threemaextractor.service.file.MasterKey;
 import de.hsmw.threemaextractor.service.lib.Base32;
 import de.hsmw.threemaextractor.service.main.CryptUtils;
-import de.hsmw.threemaextractor.service.file.MasterKey;
 import de.hsmw.threemaextractor.service.main.FileStore;
 
 import java.io.File;
@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * represents avatar of contact
+ *
  * @see AbstractAvatar
  */
 public class ContactAvatar extends AbstractAvatar {
@@ -28,7 +29,7 @@ public class ContactAvatar extends AbstractAvatar {
      *
      * @param mediaDir media dir (see {@link FileStore#mediaDir()})
      * @param identity Threema ID of the desired contact
-     * @param isUser whether the desired contact is the user themself
+     * @param isUser   whether the desired contact is the user themself
      * @throws FileNotFoundException if the file is not present (contact has no avatar set or file was deleted)
      */
     /*

@@ -6,7 +6,6 @@ import de.hsmw.threemaextractor.service.data.group.GroupStore;
 import de.hsmw.threemaextractor.service.data.message.DirectMessageStore;
 import de.hsmw.threemaextractor.service.db.DataFetcher;
 import de.hsmw.threemaextractor.service.db.SqlCipherHandler;
-import de.hsmw.threemaextractor.service.file.MasterKey;
 import de.hsmw.threemaextractor.service.main.FileStore;
 
 import java.io.File;
@@ -28,9 +27,10 @@ public class MainDatabase {
 
     /**
      * initialize database connection, decrypt and parse
+     *
      * @param mainDBFile main database file (see {@link FileStore#databaseFile()})
-     * @param masterKey master key
-     * @param mediaDir media directory (see {@link FileStore#mediaDir()})
+     * @param masterKey  master key
+     * @param mediaDir   media directory (see {@link FileStore#mediaDir()})
      */
     public MainDatabase(File mainDBFile, MasterKey masterKey, File mediaDir) {
 
