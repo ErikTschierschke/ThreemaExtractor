@@ -2,17 +2,17 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
-         id="product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            name="de.hsmw.ThreemaExtractor.ui">
-         <property
-               name="appName"
-               value="de.hsmw.ThreemaExtractor.ui">
-         </property>
-      </product>
-   </extension>
+    <extension
+            id="product"
+            point="org.eclipse.core.runtime.products">
+        <product
+                application="org.eclipse.e4.ui.workbench.swt.E4Application"
+                name="de.hsmw.ThreemaExtractor.ui">
+            <property
+                    name="appName"
+                    value="de.hsmw.ThreemaExtractor.ui">
+            </property>
+        </product>
+    </extension>
 
 </plugin>

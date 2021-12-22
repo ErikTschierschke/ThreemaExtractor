@@ -247,9 +247,7 @@ public class DataFetcher {
         ResultSet results = connection.createStatement().executeQuery(Query.GET_ALL_DISTRIBUTION_LISTS);
         while (results.next()) {
             int id = results.getInt("id");
-            System.out.println(id);
             // fetch members
-            System.out.println(String.format(Query.GET_MEMBERS_BY_DISTRIBUTION_LIST_ID, id));
             ResultSet memberResults = connection.createStatement().executeQuery(String.format(Query.GET_MEMBERS_BY_DISTRIBUTION_LIST_ID, id));
             HashMap<String, Boolean> members = new HashMap<>();
             while (memberResults.next()) {
@@ -268,7 +266,6 @@ public class DataFetcher {
                     members,
                     tempMessageStore.getMessages()
             ));
-            System.out.println(distributionListStore.getByName(results.getString("name")));
         }
     }
 
