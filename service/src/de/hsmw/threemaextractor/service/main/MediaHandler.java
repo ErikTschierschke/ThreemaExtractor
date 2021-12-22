@@ -79,7 +79,6 @@ public class MediaHandler {
                     try {
                         mediaMessage.saveFile(masterKey, mediaDir, new File(outputDir, MEDIA_DIR + contactName));
                     } catch (FileNotFoundException e) {
-                        System.out.println(new File(outputDir, MEDIA_DIR + contactName).getAbsolutePath());
                         System.out.println("[WARNING] Media file \"" + mediaMessage.plainFileName() +
                                 "\" is referenced in chat with \"" + contactName + "\" but wasn't found in the media directory." +
                                 " It might have been deleted.");
