@@ -20,8 +20,13 @@ Export-Package: de.hsmw.threemaextractor.service.data;uses:="de.hsmw.threemaextr
   uses:="de.hsmw.threemaextractor.service.data.message,
    de.hsmw.threemaextractor.service.data.group,
    de.hsmw.threemaextractor.service.file,
+   de.hsmw.threemaextractor.service.data.distribution_list,
    de.hsmw.threemaextractor.service.data",
- de.hsmw.threemaextractor.service.file,
+ de.hsmw.threemaextractor.service.file;
+  uses:="de.hsmw.threemaextractor.service.data.message,
+   de.hsmw.threemaextractor.service.data.group,
+   de.hsmw.threemaextractor.service.data.distribution_list,
+   de.hsmw.threemaextractor.service.data",
  de.hsmw.threemaextractor.service.main;
   uses:="javax.crypto,
    de.hsmw.threemaextractor.service.data.message,
