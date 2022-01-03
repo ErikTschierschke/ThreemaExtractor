@@ -4,7 +4,7 @@ package de.hsmw.threemaextractor.service.lib;
  * The code in this file is derived from the Threema-Android project. (https://github.com/threema-ch/threema-android)
  *
  * It is subject to the terms of the GNU Affero General Public License, version 3,
- * as published by the Free Software Foundation. You may obtain a copy of the license at https://www.gnu.org/licenses/.
+ * as published by the Free Software Foundation. A copy of the licence may be obtained at https://www.gnu.org/licenses/.
  * */
 
 

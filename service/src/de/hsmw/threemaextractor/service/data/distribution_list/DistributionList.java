@@ -13,7 +13,7 @@ import java.util.TreeSet;
  *
  * @param id        distribution list in database
  * @param name      distribution list name
- * @param createdAt creation timestamp in local time (format: {@code YYYY-MM-DD hh:mm:ss.SSS000})
+ * @param createdAt creation timestamp in local time (format: {@code YYYY-MM-DD hh:mm:ss.MMMMMM})
  * @param members   distribution list members in format {@code [Threema ID, isActive?]} (see {@link Group#members()})
  * @param messages  set of messages (<i>Note</i> that these are redundantly saved in {@link MainDatabase#getDirectMessages()})
  */
