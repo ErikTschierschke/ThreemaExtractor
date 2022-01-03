@@ -8,11 +8,10 @@ import de.hsmw.threemaextractor.service.file.MasterKey;
 import de.hsmw.threemaextractor.service.main.ChatVisualizer;
 import de.hsmw.threemaextractor.service.main.FileStore;
 import de.hsmw.threemaextractor.service.main.ThreemaExtractor;
-
-import java.io.File;
-
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+
+import java.io.File;
 
 
 public class ExtractorTest implements IApplication {
@@ -43,7 +42,7 @@ public class ExtractorTest implements IApplication {
                 System.out.println(message);
             }
         }
-        
+
         System.out.println(new MasterKey(new File("res/self/files/key.dat")).getDatabaseKey());
         return IApplication.EXIT_OK;
     }
