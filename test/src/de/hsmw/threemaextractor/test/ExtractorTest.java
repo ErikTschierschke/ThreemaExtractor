@@ -37,7 +37,7 @@ public class ExtractorTest implements IApplication {
 
         }
         System.out.println(mainDatabase.getDistributionListStore().getAll().values());
-        for (DistributionList list : mainDatabase.getDistributionListStore().getAll().values()) {
+        for (DistributionList list : mainDatabase.getDistributions().getAll().values()) {
             System.out.println(list.name() + "test");
             for (IMessage message : list.messages()) {
                 System.out.println(message);

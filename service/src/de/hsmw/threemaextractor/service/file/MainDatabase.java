@@ -81,7 +81,7 @@ public class MainDatabase {
      * @return parsed distribution lists
      * @see DistributionListStore
      */
-    public DistributionListStore getDistributionListStore() {
+    public DistributionListStore getDistributionLists() {
         return distributionListStore;
     }
 }
