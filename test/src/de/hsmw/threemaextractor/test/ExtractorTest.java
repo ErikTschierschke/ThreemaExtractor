@@ -22,30 +22,29 @@ public class ExtractorTest implements IApplication {
 
 
         FileStore fileStore = new FileStore(
-                "res/self/files/key.dat", "res/self/databases/threema4.db", "res/self/shared_prefs/ch.threema.app_preferences.xml", "res/data/", "out/");
+                "res/key.dat", "res/threema4.db", "res/ch.threema.app_preferences.xml", "res/data/", "out/");
 
         ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore);
 
         MainDatabase mainDatabase = threemaExtractor.getMainDatabase();
 
         ChatVisualizer chatVisualizer = new ChatVisualizer(mainDatabase.getContacts(), true, true);
-
-        System.out.println(chatVisualizer.visualizeDirectConversation(mainDatabase.getDirectMessages(), "XNYZKFYJ"));
+//"XNYZKFYJ"
+        System.out.println(chatVisualizer.visualizeDirectConversation(mainDatabase.getDirectMessages(), "ECHOECHO"));
 
         for (Group group : threemaExtractor.getMainDatabase().getGroups().getAll().values()) {
             System.out.println(group.members());
 
         }
-        System.out.println(mainDatabase.getDistributionListStore().getAll().values());
-        for (DistributionList list : mainDatabase.getDistributions().getAll().values()) {
+        System.out.println(mainDatabase.getDistributionLists().getAll().values());
+        for (DistributionList list : mainDatabase.getDistributionLists().getAll().values()) {
             System.out.println(list.name() + "test");
             for (IMessage message : list.messages()) {
                 System.out.println(message);
             }
         }
         
-        System.out.println(new MasterKey(new File("/home/erik/Dokumente/HSMW/5. Semester/Softwareprojekt/Daten/self/ch.threema.app/files/key.dat")).getDatabaseKey());
-
+        System.out.println(new MasterKey(new File("res/self/files/key.dat")).getDatabaseKey());
         return IApplication.EXIT_OK;
     }
 

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 
 public class DataFetcher {
@@ -121,10 +122,9 @@ public class DataFetcher {
                 result.getString("identity"),
                 result.getBoolean("outbox"),
                 getState(result.getString("state")),
-                // TODO fetch correct times from updated dataset
-                result.getDate("postedAtUtc"),
                 result.getDate("createdAtUtc"),
-                result.getDate("modifiedAtUtc"),
+                getReceivedTimestamp(result),
+                getReadTimestamp(result),
                 result.getString("body"));
     }
 
@@ -140,9 +140,9 @@ public class DataFetcher {
                 result.getString("identity"),
                 result.getBoolean("outbox"),
                 getState(result.getString("state")),
-                result.getDate("postedAtUtc"),
                 result.getDate("createdAtUtc"),
-                result.getDate("modifiedAtUtc"),
+                getReceivedTimestamp(result),
+                getReadTimestamp(result),
                 result.getString("caption"),
                 body.getJsonNumber(0).doubleValue(),
                 body.getJsonNumber(1).doubleValue(),
@@ -164,9 +164,9 @@ public class DataFetcher {
                 result.getString("identity"),
                 result.getBoolean("outbox"),
                 getState(result.getString("state")),
-                result.getDate("postedAtUtc"),
                 result.getDate("createdAtUtc"),
-                result.getDate("modifiedAtUtc"),
+                getReceivedTimestamp(result),
+                getReadTimestamp(result),
                 body.getString(4),
                 body.getString(2),
                 result.getString("caption")
@@ -185,9 +185,9 @@ public class DataFetcher {
                 result.getString("identity"),
                 result.getBoolean("outbox"),
                 getState(result.getString("state")),
-                result.getDate("postedAtUtc"),
                 result.getDate("createdAtUtc"),
-                result.getDate("modifiedAtUtc"),
+                getReceivedTimestamp(result),
+                getReadTimestamp(result),
 
                 // default value -1 results status/reason null
                 VoipMessage.getStatusByInt(body.getInt("status", -1)),
@@ -281,5 +281,30 @@ public class DataFetcher {
         }
 
         return null;
+    }
+
+    // Until app version 4.5 the received and read timespamps were using the colums "postedAtUtc" and "modifiedAtUtc".
+    // The 4.6 update introduces the columns "deliveredAtUtc" and "readUtc".
+    // Since old message records are not updated, both need to be parsed.
+    private Date getReceivedTimestamp(ResultSet result) throws SQLException {
+        try {
+            return result.getDate("deliveredAtUtc");
+        } catch (SQLException e) {
+            /*
+                if "deliveredAtUtc" is not found, message is from version <4.6
+                parse "postedAtUtc" instead
+                may throw new SQLException -> handled by MainDatabase constructor
+             */
+            return result.getDate("postedAtUtc");
+        }
+    }
+
+    private Date getReadTimestamp(ResultSet result) throws SQLException {
+        try {
+            return result.getDate("readAtUtc");
+        } catch (SQLException e) {
+            // if not present parse "modifiedAtUtc instead"
+            return result.getDate("modifiedAtUtc");
+        }
     }
 }
