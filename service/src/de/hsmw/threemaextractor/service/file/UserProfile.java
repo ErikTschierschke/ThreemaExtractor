@@ -1,6 +1,6 @@
 package de.hsmw.threemaextractor.service.file;
 
-import de.hsmw.threemaextractor.service.data.ContactAvatar;
+import de.hsmw.threemaextractor.service.data.contact.ContactAvatar;
 import de.hsmw.threemaextractor.service.main.FileStore;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

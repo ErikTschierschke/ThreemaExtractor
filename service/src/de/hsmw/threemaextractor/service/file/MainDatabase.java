@@ -1,6 +1,7 @@
 package de.hsmw.threemaextractor.service.file;
 
-import de.hsmw.threemaextractor.service.data.ContactStore;
+import de.hsmw.threemaextractor.service.data.ballot.BallotStore;
+import de.hsmw.threemaextractor.service.data.contact.ContactStore;
 import de.hsmw.threemaextractor.service.data.distribution_list.DistributionListStore;
 import de.hsmw.threemaextractor.service.data.group.GroupStore;
 import de.hsmw.threemaextractor.service.data.message.DirectMessageStore;
@@ -23,6 +24,7 @@ public class MainDatabase {
     private final DirectMessageStore messageStore = new DirectMessageStore();
     private final GroupStore groupStore = new GroupStore();
     private final DistributionListStore distributionListStore = new DistributionListStore();
+    private final BallotStore ballotStore = new BallotStore();
     private Connection connection;
 
     /**
@@ -43,7 +45,7 @@ public class MainDatabase {
             e.printStackTrace();
         }
 
-        dataFetcher = new DataFetcher(connection, contactStore, messageStore, groupStore, distributionListStore,
+        dataFetcher = new DataFetcher(connection, contactStore, messageStore, groupStore, distributionListStore, ballotStore,
                 masterKey, mediaDir);
         try {
             dataFetcher.fetchAll();
@@ -83,5 +85,13 @@ public class MainDatabase {
      */
     public DistributionListStore getDistributionLists() {
         return distributionListStore;
+    }
+
+    /**
+     * @return parsed ballots
+     * @see BallotStore
+     */
+    public BallotStore getBallots() {
+        return ballotStore;
     }
 }

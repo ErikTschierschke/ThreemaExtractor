@@ -1,4 +1,4 @@
-package de.hsmw.threemaextractor.service.data;
+package de.hsmw.threemaextractor.service.data.contact;
 
 
 import java.io.File;

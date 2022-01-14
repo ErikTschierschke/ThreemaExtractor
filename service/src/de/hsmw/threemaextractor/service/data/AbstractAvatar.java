@@ -1,5 +1,6 @@
 package de.hsmw.threemaextractor.service.data;
 
+import de.hsmw.threemaextractor.service.data.contact.ContactAvatar;
 import de.hsmw.threemaextractor.service.data.group.GroupAvatar;
 import de.hsmw.threemaextractor.service.file.MasterKey;
 import de.hsmw.threemaextractor.service.main.CryptUtils;

@@ -1,8 +1,10 @@
 package de.hsmw.threemaextractor.service.db;
 
-import de.hsmw.threemaextractor.service.data.Contact;
-import de.hsmw.threemaextractor.service.data.ContactAvatar;
-import de.hsmw.threemaextractor.service.data.ContactStore;
+import de.hsmw.threemaextractor.service.data.ballot.Ballot;
+import de.hsmw.threemaextractor.service.data.ballot.BallotStore;
+import de.hsmw.threemaextractor.service.data.contact.Contact;
+import de.hsmw.threemaextractor.service.data.contact.ContactAvatar;
+import de.hsmw.threemaextractor.service.data.contact.ContactStore;
 import de.hsmw.threemaextractor.service.data.distribution_list.DistributionList;
 import de.hsmw.threemaextractor.service.data.distribution_list.DistributionListStore;
 import de.hsmw.threemaextractor.service.data.group.Group;
@@ -29,17 +31,20 @@ public class DataFetcher {
     private final DirectMessageStore directMessageStore;
     private final GroupStore groupStore;
     private final DistributionListStore distributionListStore;
+    private final BallotStore ballotStore;
 
     private final MasterKey masterKey;
     private final File mediaDir;
 
-    public DataFetcher(Connection connection, ContactStore contactStore, DirectMessageStore messageStore, GroupStore groupStore, DistributionListStore distributionListStore,
+    public DataFetcher(Connection connection, ContactStore contactStore, DirectMessageStore messageStore, GroupStore groupStore,
+                       DistributionListStore distributionListStore, BallotStore ballotStore,
                        MasterKey masterKey, File mediaDir) {
         this.connection = connection;
         this.contactStore = contactStore;
         this.directMessageStore = messageStore;
         this.groupStore = groupStore;
         this.distributionListStore = distributionListStore;
+        this.ballotStore = ballotStore;
         this.masterKey = masterKey;
         this.mediaDir = mediaDir;
     }
@@ -50,6 +55,7 @@ public class DataFetcher {
         fetchDirectMessages();
         fetchGroups();
         fetchDistributionLists();
+        fetchBallots();
     }
 
     /**
@@ -285,6 +291,47 @@ public class DataFetcher {
                     results.getString("createdAt"),
                     members,
                     tempMessageStore.getMessages()
+            ));
+        }
+    }
+
+    /**
+     * fetch ballots
+     */
+    public void fetchBallots() throws SQLException {
+
+        ResultSet results = connection.createStatement().executeQuery(Query.GET_ALL_BALLOTS);
+        while (results.next()) {
+            int id = results.getInt("id");
+
+            // fetch votes
+            HashMap<String, String[]> votes = new HashMap<>();
+            ResultSet voteResults = connection.createStatement().executeQuery(String.format(Query.GET_VOTES_BY_BALLOT_ID, id));
+            while (voteResults.next()) {
+
+                //convert String from voters column to array
+                String votesString = voteResults.getString("identities");
+                String[] votesArray;
+                if (votesString != null) {
+                    votesArray = votesString.split(",");
+                } else {
+                    votesArray = null;
+                }
+
+                votes.put(voteResults.getString("name"), votesArray);
+            }
+
+            ballotStore.add(new Ballot(
+                    id,
+                    results.getString("creatorIdentity"),
+                    results.getString("name"),
+                    results.getString("state").equals("CLOSED"),
+                    results.getString("assessment").equals("MULTIPLE_CHOICE"),
+                    results.getString("type").equals("RESULT_ON_CLOSE"),
+                    results.getDate("createdAt"),
+                    results.getDate("modifiedAt"),
+                    results.getDate("lastViewedAt"),
+                    votes
             ));
         }
     }

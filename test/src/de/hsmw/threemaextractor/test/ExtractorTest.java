@@ -1,5 +1,6 @@
 package de.hsmw.threemaextractor.test;
 
+import de.hsmw.threemaextractor.service.data.ballot.Ballot;
 import de.hsmw.threemaextractor.service.data.distribution_list.DistributionList;
 import de.hsmw.threemaextractor.service.data.group.Group;
 import de.hsmw.threemaextractor.service.data.message.IMessage;
@@ -42,6 +43,10 @@ public class ExtractorTest implements IApplication {
             for (IMessage message : list.messages()) {
                 System.out.println(message);
             }
+        }
+
+        for (Ballot ballot : mainDatabase.getBallots().getAll()) {
+            System.out.println(ballot);
         }
 
         System.out.println(new MasterKey(new File("res/key.dat")).getDatabaseKey());

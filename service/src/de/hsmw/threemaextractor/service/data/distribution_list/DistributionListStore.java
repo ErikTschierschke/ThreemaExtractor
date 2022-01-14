@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * stores distribution lists from main database
  *
- * @see MainDatabase#getDistributionListStore()
+ * @see MainDatabase#getDistributionLists() ()
  */
 public class DistributionListStore {
 

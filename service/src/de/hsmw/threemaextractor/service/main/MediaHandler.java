@@ -1,6 +1,6 @@
 package de.hsmw.threemaextractor.service.main;
 
-import de.hsmw.threemaextractor.service.data.Contact;
+import de.hsmw.threemaextractor.service.data.contact.Contact;
 import de.hsmw.threemaextractor.service.data.group.Group;
 import de.hsmw.threemaextractor.service.data.message.IMessage;
 import de.hsmw.threemaextractor.service.data.message.MediaMessage;

@@ -20,4 +20,13 @@ class Query {
     final static String GET_MESSAGES_BY_DISTRIBUTION_LIST_ID =
             "SELECT * FROM distribution_list_message " +
                     "WHERE distributionListId = %d;";
+
+    final static String GET_ALL_BALLOTS = "SELECT * FROM ballot;";
+    final static String GET_VOTES_BY_BALLOT_ID =
+            "SELECT *, GROUP_CONCAT(votingIdentity) as identities " +
+                    "FROM ballot_choice LEFT JOIN " +
+                    "    (SELECT * FROM ballot_vote WHERE choice = 1) " +
+                    "    ON ballot_choice.id = ballotChoiceId " +
+                    "WHERE ballot_choice.ballotId = %d " +
+                    "GROUP BY ballot_choice.id;";
 }
