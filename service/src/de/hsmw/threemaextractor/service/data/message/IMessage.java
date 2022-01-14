@@ -20,7 +20,7 @@ public interface IMessage extends Comparable<IMessage> {
      * <i>(automaticly implemented by record classes)</i>
      *
      * @return in <b>direct chats</b>: Threema ID of the chat partner<p>
-     * in <b>groups</b>: Threema ID of the message sender
+     * in <b>groups</b>: Threema ID of the message sender, <b>null</b> if message is outgoing
      */
     String identity();
 

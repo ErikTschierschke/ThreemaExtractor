@@ -13,6 +13,7 @@ import java.util.TreeSet;
 
 /**
  * turns {@link IMessageStore} into readable chat representation
+ * intentionally built for internal testing, but could be useful in production as well
  */
 public class ChatVisualizer {
 
@@ -116,6 +117,10 @@ public class ChatVisualizer {
                 msg += " Duration: " + voipMessage.duration() + "s";
             }
             msg += ">";
+        }
+        if (message instanceof BallotStatusMessage ballotStatusMessage) {
+            msg += "<Ballot Status Message - BallotID: " + ballotStatusMessage.ballotId() +
+                    " Action: " + ballotStatusMessage.action().toString() + ">";
         }
 
         return msg;

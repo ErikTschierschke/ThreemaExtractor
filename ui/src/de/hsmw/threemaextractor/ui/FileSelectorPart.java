@@ -281,7 +281,7 @@ public class FileSelectorPart {
         if (FileStore.checkFile(path) == CheckResult.MISSING) {
             MessageDialog.openWarning(new Shell(),
                     "Fehler",
-                    object + " " + path + "wurde nicht gefunden.");
+                    object + " " + path + " wurde nicht gefunden.");
             return true;
         }
         return false;

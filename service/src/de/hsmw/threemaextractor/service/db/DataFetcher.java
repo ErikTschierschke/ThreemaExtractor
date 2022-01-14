@@ -106,8 +106,7 @@ public class DataFetcher {
                 case 4 -> message = fetchLocationMessage(results);
                 case 8 -> message = fetchMediaMessage(results);
                 case 9 -> message = fetchVoipMessage(results);
-                case 7 -> {
-                } //TODO parse ballots
+                case 7 -> message = fetchBallotStatusMessage(results);
                 default -> System.err.println("Unknown type code " + results.getInt("type"));
             }
             store.add(message);
@@ -193,6 +192,27 @@ public class DataFetcher {
                 VoipMessage.getStatusByInt(body.getInt("status", -1)),
                 VoipMessage.getRejectReasonByInt(body.getInt("reason", -1)),
                 body.getInt("duration", -1)
+        );
+    }
+
+    private BallotStatusMessage fetchBallotStatusMessage(ResultSet result) throws SQLException {
+
+        // parse json array in body
+        // structure: [Action : int, ballotId : int]
+        // see https://github.com/threema-ch/threema-android/blob/0b6543eafe325c37d25ae06e87802c5479bee099/app/src/main/java/ch/threema/storage/models/data/media/BallotDataModel.java#L69
+        JsonArray body = JsonUtils.parseJsonBody(result.getString("body"));
+
+        return new BallotStatusMessage(
+                result.getString("uid"),
+                result.getString("identity"),
+                result.getBoolean("outbox"),
+                getState(result.getString("state")),
+                result.getDate("createdAtUtc"),
+                getReceivedTimestamp(result),
+                getReadTimestamp(result),
+
+                BallotStatusMessage.getActionByInt(body.getInt(0)),
+                body.getInt(1)
         );
     }
 
