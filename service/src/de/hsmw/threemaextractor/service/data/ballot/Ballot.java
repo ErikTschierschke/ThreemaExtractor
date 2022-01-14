@@ -15,7 +15,7 @@ import java.util.HashMap;
  * @param createdAt        timestamp when ballot was created
  * @param modifiedAt       timestamp when ballot was last edited
  * @param lastViewedAt     timestamp when ballot was last viewed (by the user)
- * @param results          the vote results<p>
+ * @param results          the vote results
  *                         format: {@code [option : String, voterIdentities : String[]]} (if nobody voted for an option {@code voterIdentities} is <b>null</b>)
  */
 public record Ballot(int id, String creatorIdentity, String text,

@@ -1,4 +1,6 @@
 de.hsmw.threemaextractor.service.data
+de.hsmw.threemaextractor.service.data.ballot
+de.hsmw.threemaextractor.service.data.contact
 de.hsmw.threemaextractor.service.data.distribution_list
 de.hsmw.threemaextractor.service.data.group
 de.hsmw.threemaextractor.service.data.message
