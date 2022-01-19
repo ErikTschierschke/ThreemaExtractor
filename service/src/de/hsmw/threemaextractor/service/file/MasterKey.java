@@ -1,6 +1,7 @@
 package de.hsmw.threemaextractor.service.file;
 
 import de.hsmw.threemaextractor.service.lib.ThreemaLib;
+import de.hsmw.threemaextractor.service.main.CryptUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class MasterKey {
     public MasterKey(File masterKeyFile) {
 
         try {
-            key = ThreemaLib.readKeyFromFile(masterKeyFile);
+            key = CryptUtils.readKeyFromFile(masterKeyFile);
         } catch (IOException e) {
             System.err.println("ERROR READING MASTER KEY.");
             e.printStackTrace();
