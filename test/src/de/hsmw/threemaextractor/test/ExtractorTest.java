@@ -31,7 +31,7 @@ public class ExtractorTest implements IApplication {
         ChatVisualizer chatVisualizer = new ChatVisualizer(mainDatabase.getContacts(), true, true);
 //"XNYZKFYJ"
         //System.out.println(chatVisualizer.visualizeDirectConversation(mainDatabase.getDirectMessages(), "ECHOECHO"));
-        System.out.println(chatVisualizer.visualizeGroupConversation(mainDatabase.getGroups().getByName("A").messages()));
+        System.out.println(chatVisualizer.visualizeConversation(mainDatabase.getGroups().getByName("A").messages()));
 
         for (Group group : threemaExtractor.getMainDatabase().getGroups().getAll().values()) {
             System.out.println(group.members());

@@ -6,21 +6,24 @@ import java.util.TreeSet;
 /**
  * stores messages from all direct conversations
  */
-public class DirectMessageStore implements IMessageStore {
+public class DirectMessageStore {
 
     private final HashMap<String, TreeSet<IMessage>> messages = new HashMap<>();
 
-    /**
-     * adds a message
-     *
-     * @hidden
-     */
-    @Override
-    public void add(IMessage message) {
 
-        TreeSet<IMessage> conversation = messages.getOrDefault(message.identity(), new TreeSet<>());
-        conversation.add(message);
-        messages.put(message.identity(), conversation);
+    /**
+     * set the stored messages
+     *
+     * @param messageSet all direct messages as {@code TreeSet<IMessage>}
+     */
+    public void setMessages(TreeSet<IMessage> messageSet) {
+
+        // split messages by Threema ID of chat partner to get conversations
+        for (IMessage message : messageSet) {
+            TreeSet<IMessage> conversation = messages.getOrDefault(message.identity(), new TreeSet<>());
+            conversation.add(message);
+            messages.put(message.identity(), conversation);
+        }
     }
 
     /**

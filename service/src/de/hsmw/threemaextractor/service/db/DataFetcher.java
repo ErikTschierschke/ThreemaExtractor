@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class DataFetcher {
 
@@ -99,14 +100,16 @@ public class DataFetcher {
     public void fetchDirectMessages() throws SQLException {
 
         ResultSet results = connection.createStatement().executeQuery(Query.GET_ALL_MESSAGES);
-        addMessagesToStore(results, directMessageStore);
+        TreeSet<IMessage> messages = new TreeSet<>();
+        addMessagesToSet(results, messages);
+        directMessageStore.setMessages(messages);
     }
 
-    private void addMessagesToStore(ResultSet results, IMessageStore store) throws SQLException {
+    private void addMessagesToSet(ResultSet results, TreeSet<IMessage> messageSet) throws SQLException {
         IMessage message = null;
 
         while (results.next()) {
-
+//TODO document
             switch (results.getInt("type")) {
                 case 0 -> message = fetchTextMessage(results);
                 case 4 -> message = fetchLocationMessage(results);
@@ -115,7 +118,7 @@ public class DataFetcher {
                 case 7 -> message = fetchBallotStatusMessage(results);
                 default -> System.err.println("Unknown type code " + results.getInt("type"));
             }
-            store.add(message);
+            messageSet.add(message);
         }
 
     }
@@ -241,8 +244,8 @@ public class DataFetcher {
             }
             // fetch group messages
             ResultSet messageResults = connection.createStatement().executeQuery(String.format(Query.GET_MESSAGES_BY_GROUP_ID, id));
-            GroupMessageStore groupMessageStore = new GroupMessageStore();
-            addMessagesToStore(messageResults, groupMessageStore);
+            TreeSet<IMessage> messages = new TreeSet<>();
+            addMessagesToSet(messageResults, messages);
 
             //try to retrieve group avatar
             GroupAvatar avatarFile = null;
@@ -258,7 +261,7 @@ public class DataFetcher {
                     groupsResults.getString("name"),
                     groupsResults.getString("creatorIdentity"),
                     members,
-                    groupMessageStore,
+                    messages,
                     avatarFile
             ));
 
@@ -282,15 +285,15 @@ public class DataFetcher {
 
             // fetch messages
             ResultSet messageResults = connection.createStatement().executeQuery(String.format(Query.GET_MESSAGES_BY_DISTRIBUTION_LIST_ID, id));
-            GroupMessageStore tempMessageStore = new GroupMessageStore();
-            addMessagesToStore(messageResults, tempMessageStore);
+            TreeSet<IMessage> messages = new TreeSet<>();
+            addMessagesToSet(messageResults, messages);
 
             distributionListStore.add(new DistributionList(
                     id,
                     results.getString("name"),
                     results.getString("createdAt"),
                     members,
-                    tempMessageStore.getMessages()
+                    messages
             ));
         }
     }

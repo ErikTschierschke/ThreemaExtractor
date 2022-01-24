@@ -8,11 +8,6 @@ package de.hsmw.threemaextractor.service.lib;
  * */
 
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 public class ThreemaLib {
 
     /**

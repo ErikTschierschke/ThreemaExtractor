@@ -18,22 +18,22 @@ import java.util.TreeSet;
 public class ChatVisualizer {
 
     private final String userName;
-    private final boolean useCustomNames;
+    private final boolean useFirstLastNames;
     private final ContactStore contactStore;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM. HH:mm");
 
     /**
-     * @param userName       user name used for outgoing messages (e.g. {@link UserProfile#getNickname()})
-     * @param contactStore   the {@link ContactStore} retrieved from the database ({@link MainDatabase#getContacts()})
-     * @param useCustomNames <b>true:</b> use user specified first + last names
-     *                       <b>false:</b> use nicknames (specified by contacts)
-     * @param useLocalTime   <b>true:</b> timestamps in "Europe/Berlin" time -
-     *                       <b>false:</b> timestamps in UTC
+     * @param userName          user name used for outgoing messages (e.g. {@link UserProfile#getNickname()})
+     * @param contactStore      the {@link ContactStore} retrieved from the database ({@link MainDatabase#getContacts()})
+     * @param useFirstLastNames <b>true:</b> use user specified first + last names
+     *                          <b>false:</b> use nicknames (specified by contacts)
+     * @param useLocalTime      <b>true:</b> timestamps in "Europe/Berlin" time -
+     *                          <b>false:</b> timestamps in UTC
      */
-    public ChatVisualizer(String userName, ContactStore contactStore, boolean useCustomNames, boolean useLocalTime) {
+    public ChatVisualizer(String userName, ContactStore contactStore, boolean useFirstLastNames, boolean useLocalTime) {
         this.userName = userName;
-        this.useCustomNames = useCustomNames;
+        this.useFirstLastNames = useFirstLastNames;
         this.contactStore = contactStore;
 
         if (useLocalTime) {
@@ -45,37 +45,19 @@ public class ChatVisualizer {
     /**
      * if no userName is provided, "Suspect" is used
      */
-    public ChatVisualizer(ContactStore contactStore, boolean useCustomNames, boolean useLocalTime) {
-        this("Suspect", contactStore, useCustomNames, useLocalTime);
+    public ChatVisualizer(ContactStore contactStore, boolean useFirstLastNames, boolean useLocalTime) {
+        this("Suspect", contactStore, useFirstLastNames, useLocalTime);
     }
 
     /**
-     * visualizes a direct chat
+     * turns a conversation into a human-readable String
      *
-     * @param directMessageStore the {@link DirectMessageStore} retireved from database ({@link MainDatabase#getDirectMessages()})
-     * @param partnerId          Threema ID of the chat partner
+     * @param messageSet a conversation as {@code TreeSet<IMessage>} (see {@link DirectMessageStore#getByIdentity(String)}, {@link Group#messages()})
      */
-    public String visualizeDirectConversation(DirectMessageStore directMessageStore, String partnerId) {
+    public String visualizeConversation(TreeSet<IMessage> messageSet) {
         StringBuilder conversation = new StringBuilder();
-        TreeSet<IMessage> messages = directMessageStore.getByIdentity(partnerId);
 
-        for (IMessage message : messages) {
-            conversation.append(messageToString(message)).append("\n\n");
-        }
-
-        return conversation.toString();
-    }
-
-    /**
-     * visualizes a group chat
-     *
-     * @param groupMessageStore a {@link GroupMessageStore} ({@link Group#messages()})
-     */
-    public String visualizeGroupConversation(GroupMessageStore groupMessageStore) {
-        StringBuilder conversation = new StringBuilder();
-        TreeSet<IMessage> messages = groupMessageStore.getMessages();
-
-        for (IMessage message : messages) {
+        for (IMessage message : messageSet) {
             conversation.append(messageToString(message)).append("\n\n");
         }
 
@@ -94,7 +76,11 @@ public class ChatVisualizer {
             if (message.identity() == null) {
                 msg = "[" + dateFormat.format(message.utcReceived()) + "]\n";
             } else {
+                if (message instanceof TextMessage t) {
+                    System.out.println(t.text());
+                }
                 msg = "[" + getContactName(message.identity()) + " - " + dateFormat.format(message.utcReceived()) + "]\n";
+                System.out.println("SUCCESS");
             }
 
         }
@@ -128,7 +114,7 @@ public class ChatVisualizer {
 
     private String getContactName(String threemaId) {
         Contact contact = contactStore.getById(threemaId);
-        if (useCustomNames) {
+        if (useFirstLastNames) {
             return contact.firstName() + " " + contact.lastName();
         }
         return contact.nickname();

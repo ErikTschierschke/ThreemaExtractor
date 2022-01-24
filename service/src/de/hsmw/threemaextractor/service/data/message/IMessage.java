@@ -1,11 +1,13 @@
 package de.hsmw.threemaextractor.service.data.message;
 
+import de.hsmw.threemaextractor.service.data.group.Group;
+
 import java.util.Date;
 
 /**
  * interface for all data records<p>
  * <p>
- * extends {@code Comparable} for ordered storage in {@code TreeSet}s (see {@link DirectMessageStore}, {@link GroupMessageStore})
+ * extends {@code Comparable} for ordered storage in {@code TreeSet}s (see {@link DirectMessageStore}, {@link Group#messages()})
  */
 public interface IMessage extends Comparable<IMessage> {
 

@@ -266,7 +266,7 @@ public class FileSelectorPart {
                 MainDatabase database = extractor.getMainDatabase();
                 ChatVisualizer chatVisualizer = new ChatVisualizer(database.getContacts(), false, false);
 
-                System.out.println(chatVisualizer.visualizeDirectConversation(database.getDirectMessages(), "XNYZKFYJ"));
+                System.out.println(chatVisualizer.visualizeConversation(database.getDirectMessages().getAll(), "XNYZKFYJ"));
 
                 parent.getShell().close();
             }

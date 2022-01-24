@@ -92,7 +92,7 @@ public class MediaHandler {
                 group.groupAvatar().writeToFile(outputDir, GROUP_AVATAR_DIR + group.name());
 
                 // save group media
-                for (IMessage message : group.messages().getMessages()) {
+                for (IMessage message : group.messages()) {
                     if (message instanceof MediaMessage mediaMessage) {
                         try {
                             mediaMessage.saveFile(masterKey, mediaDir, new File(outputDir, GROUP_MEDIA_DIR + group.name()));
