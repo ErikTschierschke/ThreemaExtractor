@@ -1,6 +1,8 @@
 package de.hsmw.threemaextractor.service.data.contact;
 
 
+import de.hsmw.threemaextractor.service.data.Avatar;
+
 import java.io.File;
 
 /**
@@ -18,9 +20,9 @@ import java.io.File;
  *                          <li><i>2</i> - id and public key of contact have been manually checked by scanning the contact's QR code
  *                          </ul>
  * @param isHidden          contact is hidden in app (requires Android display lock to see)
- * @param contactAvatar     avatar of the contact, <b>null</b> if the contact has no avatar or the encrypted file was deleted (see {@link ContactAvatar#getFileByIdentity(File, String, boolean)})
+ * @param contactAvatar     avatar of the contact, <b>null</b> if the contact has no avatar or the encrypted file was deleted (see {@link Avatar#getContactAvatarFile(File, String, boolean)})
  */
 public record Contact(String identity, String firstName, String lastName,
                       String nickname, String androidContactId, int verificationLevel,
-                      boolean isHidden, ContactAvatar contactAvatar) {
+                      boolean isHidden, Avatar contactAvatar) {
 }

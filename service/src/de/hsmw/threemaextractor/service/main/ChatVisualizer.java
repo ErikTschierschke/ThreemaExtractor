@@ -12,7 +12,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 
 /**
- * turns {@link IMessageStore} into readable chat representation
+ * turns a conversation as {@code TreeSet<IMessage>} into readable chat representation
  * intentionally built for internal testing, but could be useful in production as well
  */
 public class ChatVisualizer {
@@ -24,7 +24,7 @@ public class ChatVisualizer {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM. HH:mm");
 
     /**
-     * @param userName          user name used for outgoing messages (e.g. {@link UserProfile#getNickname()})
+     * @param userName          username used for outgoing messages (e.g. {@link UserProfile#getNickname()})
      * @param contactStore      the {@link ContactStore} retrieved from the database ({@link MainDatabase#getContacts()})
      * @param useFirstLastNames <b>true:</b> use user specified first + last names
      *                          <b>false:</b> use nicknames (specified by contacts)

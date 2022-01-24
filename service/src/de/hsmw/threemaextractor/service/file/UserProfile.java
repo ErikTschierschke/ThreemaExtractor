@@ -1,6 +1,6 @@
 package de.hsmw.threemaextractor.service.file;
 
-import de.hsmw.threemaextractor.service.data.contact.ContactAvatar;
+import de.hsmw.threemaextractor.service.data.Avatar;
 import de.hsmw.threemaextractor.service.main.FileStore;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -25,7 +25,7 @@ public class UserProfile {
     private String identity;
     private String nickname;
     private String eMail;
-    private ContactAvatar userAvatar;
+    private Avatar userAvatar;
     private String[] blockedList;
 
     /**
@@ -76,7 +76,7 @@ public class UserProfile {
 
         // try to get user avatar
         try {
-            userAvatar = new ContactAvatar(ContactAvatar.getFileByIdentity(mediaDir, identity, true), masterKey);
+            userAvatar = new Avatar(Avatar.getContactAvatarFile(mediaDir, identity, true), masterKey);
         } catch (IOException e) {
             System.out.println("[WARNING] User avatar not found. It was either deleted or the user has no avatar set.");
             userAvatar = null;
@@ -114,9 +114,8 @@ public class UserProfile {
 
     /**
      * @return the users avatar, <b>null</b> if user has no avatar set
-     * @see ContactAvatar
      */
-    public ContactAvatar getUserAvatar() {
+    public Avatar getUserAvatar() {
         return userAvatar;
     }
 

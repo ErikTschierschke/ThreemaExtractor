@@ -1,14 +1,13 @@
 package de.hsmw.threemaextractor.service.db;
 
+import de.hsmw.threemaextractor.service.data.Avatar;
 import de.hsmw.threemaextractor.service.data.ballot.Ballot;
 import de.hsmw.threemaextractor.service.data.ballot.BallotStore;
 import de.hsmw.threemaextractor.service.data.contact.Contact;
-import de.hsmw.threemaextractor.service.data.contact.ContactAvatar;
 import de.hsmw.threemaextractor.service.data.contact.ContactStore;
 import de.hsmw.threemaextractor.service.data.distribution_list.DistributionList;
 import de.hsmw.threemaextractor.service.data.distribution_list.DistributionListStore;
 import de.hsmw.threemaextractor.service.data.group.Group;
-import de.hsmw.threemaextractor.service.data.group.GroupAvatar;
 import de.hsmw.threemaextractor.service.data.group.GroupStore;
 import de.hsmw.threemaextractor.service.data.message.*;
 import de.hsmw.threemaextractor.service.file.MasterKey;
@@ -71,11 +70,11 @@ public class DataFetcher {
             String identity = results.getString("identity");
 
             // try to retrieve contact avatar file
-            ContactAvatar avatarFile = null;
+            Avatar avatarFile = null;
             if (!identity.equals("ECHOECHO")) {
                 try {
 
-                    avatarFile = new ContactAvatar(ContactAvatar.getFileByIdentity(mediaDir, identity, false),
+                    avatarFile = new Avatar(Avatar.getContactAvatarFile(mediaDir, identity, false),
                             masterKey);
                 } catch (IOException e) {
                     System.out.println("[WARNING] User avatar file not found. It was either deleted or the user hat no avatar set.");
@@ -248,9 +247,9 @@ public class DataFetcher {
             addMessagesToSet(messageResults, messages);
 
             //try to retrieve group avatar
-            GroupAvatar avatarFile = null;
+            Avatar avatarFile = null;
             try {
-                avatarFile = new GroupAvatar(GroupAvatar.getFileByGroupId(mediaDir, id), masterKey);
+                avatarFile = new Avatar(Avatar.getGroupAvatarFile(mediaDir, id), masterKey);
             } catch (IOException e) {
                 System.out.println("[WARNING] Avatar for group\"" + groupsResults.getString("name") + "\" was not found." +
                         " The file was either deleted or the group has no avatar set.");
