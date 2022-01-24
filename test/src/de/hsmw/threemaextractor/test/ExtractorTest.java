@@ -13,6 +13,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import java.io.File;
+import java.util.Iterator;
 
 
 public class ExtractorTest implements IApplication {
@@ -22,11 +23,15 @@ public class ExtractorTest implements IApplication {
 
 
         FileStore fileStore = new FileStore(
-                "res/key.dat", "res/threema4.db", "res/ch.threema.app_preferences.xml", "res/data/", "out/");
+                "res/delete/key.dat", "res/delete/threema4.db", "res/delete/ch.threema.app_preferences.xml", "res/delete/data/", "out/");
 
         ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore);
 
         MainDatabase mainDatabase = threemaExtractor.getMainDatabase();
+        
+        for(IMessage message : mainDatabase.getDirectMessages().getAll()) {
+        	System.out.println(message);
+        }
 
         ChatVisualizer chatVisualizer = new ChatVisualizer(mainDatabase.getContacts(), true, true);
 //"XNYZKFYJ"

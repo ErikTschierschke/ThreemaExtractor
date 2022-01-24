@@ -356,24 +356,38 @@ public class DataFetcher {
     // The 4.6 update introduces the columns "deliveredAtUtc" and "readUtc".
     // Since old message records are not updated, both need to be parsed.
     private Date getReceivedTimestamp(ResultSet result) throws SQLException {
+
+        Date date = null;
+
         try {
-            return result.getDate("deliveredAtUtc");
+            date = result.getDate("deliveredAtUtc");
         } catch (SQLException e) {
             /*
                 if "deliveredAtUtc" is not found, message is from version <4.6
                 parse "postedAtUtc" instead
-                may throw new SQLException -> handled by MainDatabase constructor
+                may throw another SQLException -> handled by MainDatabase constructor
              */
-            return result.getDate("postedAtUtc");
+        } finally {
+            if (date == null) {
+                date = result.getDate("postedAtUtc");
+            }
         }
+
+        return date;
     }
 
     private Date getReadTimestamp(ResultSet result) throws SQLException {
+        Date date = null;
         try {
-            return result.getDate("readAtUtc");
+            date = result.getDate("readAtUtc");
         } catch (SQLException e) {
             // if not present parse "modifiedAtUtc instead"
-            return result.getDate("modifiedAtUtc");
+        } finally {
+            if (date == null) {
+                date = result.getDate("modifiedAtUtc");
+            }
         }
+
+        return date;
     }
 }
