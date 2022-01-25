@@ -51,8 +51,8 @@ public record MediaMessage(String uid, String identity, boolean isOutgoing,
      * decrypts and saves the media file
      *
      * @param masterKey the master key
-     * @param mediaDir  the media dir (see {@link FileStore#mediaDir()})
-     * @param outDir    the output dir (see {@link FileStore#outputDir()})
+     * @param mediaDir  the media dir (see {@link FileStore#getMediaDir()})
+     * @param outDir    the output dir (see {@link FileStore#getOutputDir()})
      * @throws IOException if the associated encrypted file couldn't be found or creating the plain file failed
      */
     public void saveFile(MasterKey masterKey, File mediaDir, File outDir) throws IOException {

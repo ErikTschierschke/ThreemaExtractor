@@ -1,18 +1,25 @@
 package de.hsmw.threemaextractor.service.main;
 
+import de.hsmw.threemaextractor.service.file.MasterKey;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * utility class for checking and storing file locations
  */
-public record FileStore(File masterKeyFile, File databaseFile, File preferencesFile, File mediaDir, File outputDir) {
+public final class FileStore {
+    private final File databaseFile;
+    private final File preferencesFile;
+    private final File mediaDir;
+    private final File outputDir;
+
+
+    private final MasterKey masterKey;
 
     /**
      * initialize FileStore by given path strings
      * <p>
-     * to prevent errors, check files first with {@link FileStore#checkFile(String)} and {@link FileStore#checkMasterkeyFile(String)}
+     * to prevent errors, check files first with {@link FileStore#checkFilePresent(String)}
      *
      * @param masterKeyPath   path to master key file ({@code [ANDROID APP DIR]/ch.threema.app/files/key.dat})
      * @param databasePath    path to main database file ({@code [ANDROID APP DIR]/ch.threema.app/databases/threema4.db})
@@ -21,48 +28,56 @@ public record FileStore(File masterKeyFile, File databaseFile, File preferencesF
      * @param outputDir       path where decrypted files should be saved
      */
     public FileStore(String masterKeyPath, String databasePath, String preferencesPath, String mediaDir, String outputDir) {
-        this(new File(masterKeyPath), new File(databasePath), new File(preferencesPath), new File(mediaDir), new File(outputDir));
+
+        masterKey = new MasterKey(new File(masterKeyPath));
+
+        databaseFile = new File(databasePath);
+        preferencesFile = new File(preferencesPath);
+        this.mediaDir = new File(mediaDir);
+        this.outputDir = new File(outputDir);
+
+    }
+
+    public MasterKey getMasterKey() {
+        return masterKey;
+    }
+
+    public File getDatabaseFile() {
+        return databaseFile;
+    }
+
+    public File getPreferencesFile() {
+        return preferencesFile;
+    }
+
+    public File getMediaDir() {
+        return mediaDir;
+    }
+
+    public File getOutputDir() {
+        return outputDir;
     }
 
     /**
-     * check if a file is present
-     *
-     * @return {@link CheckResult#OK} or {@link CheckResult#MISSING}
+     * @return <b>true</b> if master key is protected by passphrase, <b>false</b> else
      */
-    public static CheckResult checkFile(String path) {
-        File file = new File(path);
-        if (file.exists()) {
-            return CheckResult.OK;
-        }
-        return CheckResult.MISSING;
+    public boolean masterKeyNeedsPassphrase() {
+        return masterKey.needsPassphrase();
     }
 
     /**
-     * check if master key is present and not encrypted by passphrase
-     *
-     * @param path path to master key
-     * @return {@link CheckResult#OK} if master key is available and not protected,<p>
-     * {@link CheckResult#MISSING} if master key file is not found,<p>
-     * {@link CheckResult#MASTERKEY_ENCRYPTED} if master key is encrypted by passphrase
+     * try to set the passphrase to unlock the master key
+     * @return <b>true</b> if passphrase is correct, <b>else</b>
      */
-    public static CheckResult checkMasterkeyFile(String path) {
-
-        File file = new File(path);
-        try {
-
-            // if first byte of master key != 0, it's encrypted with passphrase
-            FileInputStream fis = new FileInputStream(file);
-            int encryptionFlag = fis.read();
-            if (encryptionFlag == 0) {
-                return CheckResult.OK;
-            }
-            return CheckResult.MASTERKEY_ENCRYPTED;
-        } catch (IOException e) {
-            return CheckResult.MISSING;
-        }
+    public boolean setPassphrase(String passphrase) {
+        return masterKey.setPassphrase(passphrase);
     }
 
-    public enum CheckResult {
-        OK, MISSING, MASTERKEY_ENCRYPTED
+    /**
+     * check if a file is present and readable
+     */
+    public static boolean checkFilePresent(String path) {
+        File file = new File(path);
+        return file.exists() && file.canRead();
     }
 }

@@ -21,9 +21,10 @@ public class ExtractorTest implements IApplication {
     @Override
     public Object start(IApplicationContext context) throws Exception {
 
-
         FileStore fileStore = new FileStore(
-                "res/delete/key.dat", "res/delete/threema4.db", "res/delete/ch.threema.app_preferences.xml", "res/delete/data/", "out/delete");
+                "res/crypt/key.dat", "res/crypt/threema4.db", "res/delete/ch.threema.app_preferences.xml", "res/delete/data/", "out/delete");
+        
+        fileStore.setPassphrase("test1234");
 
         ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore);
 
@@ -33,10 +34,9 @@ public class ExtractorTest implements IApplication {
         	System.out.println(message);
         }
 
-        ChatVisualizer chatVisualizer = new ChatVisualizer(mainDatabase.getContacts(), true, true);
-//"XNYZKFYJ"
+        ChatVisualizer chatVisualizer = new ChatVisualizer(mainDatabase.getContacts(), true, true); //"XNYZKFYJ"
         //System.out.println(chatVisualizer.visualizeDirectConversation(mainDatabase.getDirectMessages(), "ECHOECHO"));
-        System.out.println(chatVisualizer.visualizeConversation(mainDatabase.getGroups().getByName("A").messages()));
+        //System.out.println(chatVisualizer.visualizeConversation(mainDatabase.getGroups().getByName("A").messages()));
 
         for (Group group : threemaExtractor.getMainDatabase().getGroups().getAll().values()) {
             System.out.println(group.members());
@@ -54,7 +54,7 @@ public class ExtractorTest implements IApplication {
             System.out.println(ballot);
         }
 
-        System.out.println(new MasterKey(new File("res/delete/key.dat"), null).getDatabaseKey());
+        System.out.println(new MasterKey(new File("res/delete/key.dat")).getDatabaseKey());
         return IApplication.EXIT_OK;
     }
 

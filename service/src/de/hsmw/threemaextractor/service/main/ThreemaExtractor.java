@@ -16,11 +16,11 @@ public class ThreemaExtractor {
      * takes a {@link FileStore} and extracts all available data
      */
     public ThreemaExtractor(FileStore fileStore) {
-        MasterKey masterKey = new MasterKey(fileStore.masterKeyFile());
-        mainDatabase = new MainDatabase(fileStore.databaseFile(), masterKey, fileStore.mediaDir());
-        userProfile = new UserProfile(fileStore.preferencesFile(), masterKey, fileStore.mediaDir());
+        MasterKey masterKey = fileStore.getMasterKey();
+        mainDatabase = new MainDatabase(fileStore.getDatabaseFile(), masterKey, fileStore.getMediaDir());
+        userProfile = new UserProfile(fileStore.getPreferencesFile(), masterKey, fileStore.getMediaDir());
 
-        new MediaHandler(fileStore.mediaDir(), masterKey, mainDatabase, userProfile).saveAllMedia(fileStore.outputDir());
+        new MediaHandler(fileStore.getMediaDir(), masterKey, mainDatabase, userProfile).saveAllMedia(fileStore.getOutputDir());
 
     }
 

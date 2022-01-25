@@ -30,9 +30,9 @@ public class MainDatabase {
     /**
      * initialize database connection, decrypt and parse
      *
-     * @param mainDBFile main database file (see {@link FileStore#databaseFile()})
+     * @param mainDBFile main database file (see {@link FileStore#getDatabaseFile()})
      * @param masterKey  master key
-     * @param mediaDir   media directory (see {@link FileStore#mediaDir()})
+     * @param mediaDir   media directory (see {@link FileStore#getMediaDir()})
      */
     public MainDatabase(File mainDBFile, MasterKey masterKey, File mediaDir) {
 

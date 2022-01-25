@@ -39,4 +39,5 @@ Export-Package: de.hsmw.threemaextractor.service.data;uses:="de.hsmw.threemaextr
    de.hsmw.threemaextractor.service.data"
 Bundle-ClassPath: .,
  sqlite-jdbc-3.33.0.jar,
- javax.json-1.1.4.jar
+ javax.json-1.1.4.jar,
+ scrypt-1.4.0.jar

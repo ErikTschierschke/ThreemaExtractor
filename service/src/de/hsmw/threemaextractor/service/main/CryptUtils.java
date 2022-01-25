@@ -10,8 +10,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -20,62 +18,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
 public class CryptUtils {
-
-    // see https://github.com/threema-ch/threema-android/blob/81e456bc913cd8eaa5195219482f4445f409c344/app/src/main/java/ch/threema/localcrypto/MasterKey.java#L79
-    private static final byte[] OBFUSCATION_KEY = new byte[]{(byte) 0x95, (byte) 0x0d, (byte) 0x26, (byte) 0x7a,
-            (byte) 0x88, (byte) 0xea, (byte) 0x77, (byte) 0x10, (byte) 0x9c, (byte) 0x50, (byte) 0xe7, (byte) 0x3f,
-            (byte) 0x47, (byte) 0xe0, (byte) 0x69, (byte) 0x72, (byte) 0xda, (byte) 0xc4, (byte) 0x39, (byte) 0x7c,
-            (byte) 0x99, (byte) 0xea, (byte) 0x7e, (byte) 0x67, (byte) 0xaf, (byte) 0xfd, (byte) 0xdd, (byte) 0x32,
-            (byte) 0xda, (byte) 0x35, (byte) 0xf7, (byte) 0x0c};
-
-
-    /**
-     * Load and deobfuscate key from key.dat,
-     * see https://github.com/threema-ch/threema-android/blob/23f00dbb2ef2869a12f95f2cb285740f0aef0154/app/src/main/java/ch/threema/localcrypto/MasterKey.java#L410
-     *
-     * @param masterKeyFile the key.dat file that holds the master key
-     * @param passphrase    passphrase to decrypt master key. If the master key is not encrypted, value is ignored.
-     * @return the plain master key as 32 byte array
-     */
-    public static byte[] readKeyFromFile(File masterKeyFile, String passphrase) throws IOException, UnsupportedOperationException, GeneralSecurityException {
-
-        /*
-         * KEY.DAT FILE STRUCTURE:
-         * protected flag (1 byte, 2 = protected with passphrase (Scrypt), 1 = protected with passphrase (PBKDF2), 0 = unprotected)
-         * key (32 bytes)
-         * salt (8 bytes)
-         * verification (4 bytes = start of SHA1 hash of master key)
-         *
-         * (see https://github.com/threema-ch/threema-android/blob/557b69f33dd1db96f58e41f6602e32522470f53e/app/src/main/java/ch/threema/localcrypto/MasterKey.java#L66)
-         */
-
-        DataInputStream dis = new DataInputStream(new FileInputStream(masterKeyFile));
-
-        byte[] masterKey = new byte[32];
-
-        byte protectedFlag = dis.readByte();
-        byte[] key = dis.readNBytes(32);
-        byte[] salt = dis.readNBytes(8);
-
-        // decode masterkey by XORing the obfuscation key
-        for (int i = 0; i < 32; i++) {
-            key[i] ^= OBFUSCATION_KEY[i];
-        }
-
-        if (protectedFlag == 0) {
-            // no passphrase used, deobfuscated key is master key
-            masterKey = key;
-        } else {
-            // decrypt key with passphrase
-            for (int i = 0; i < 32; i++) {
-                byte[] decryptionKey = getPassphraseDecryptionKey(protectedFlag, salt, passphrase);
-                masterKey[i] = (byte) (key[i] ^ decryptionKey[i]);
-            }
-
-        }
-
-        return masterKey;
-    }
 
 
     /**
@@ -87,7 +29,7 @@ public class CryptUtils {
      * @param passphrase    passphrase that protects the master key
      * @return 32 byte key that can be XORed with the deobfuscated key to decrypt it
      */
-    private static byte[] getPassphraseDecryptionKey(byte protectedFlag, byte[] salt, String passphrase) throws GeneralSecurityException {
+    public static byte[] getPassphraseDecryptionKey(byte protectedFlag, byte[] salt, String passphrase) throws GeneralSecurityException {
         byte[] decryptionKey = new byte[32];
 
         switch (protectedFlag) {
@@ -111,14 +53,12 @@ public class CryptUtils {
                 decryptionKey = SCrypt.scrypt(passphrase.getBytes(StandardCharsets.UTF_8), salt, 65536, 8, 1, 32);
                 break;
             }
-            default: {throw new IllegalArgumentException("ERROR DECRYPTING MASTER KEY: Unknown protection flag " + protectedFlag);}
+            default: {
+                throw new IllegalArgumentException("ERROR DECRYPTING MASTER KEY: Unknown protection flag " + protectedFlag);
+            }
         }
 
         return decryptionKey;
-
-    }
-
-    public static boolean checkPassphraseValid() {
 
     }
 
@@ -127,7 +67,7 @@ public class CryptUtils {
      * see https://github.com/threema-ch/threema-android/blob/0b6543eafe325c37d25ae06e87802c5479bee099/app/src/main/java/ch/threema/localcrypto/MasterKey.java#L348
      *
      * @param fileInputStream FileInputStream of a media file encrypted by Threema
-     * @param masterKey the used Master Key
+     * @param masterKey       the used Master Key
      * @return a CipherInputStream able to read the decrypted file content
      */
     public static CipherInputStream getCipherInputStream(FileInputStream fileInputStream, MasterKey masterKey) throws IOException {
@@ -144,7 +84,8 @@ public class CryptUtils {
     /**
      * get the decryption Cipher for a media file based on the master key and the initVector (first 16 byte of encrypted file)
      * see https://github.com/threema-ch/threema-android/blob/0b6543eafe325c37d25ae06e87802c5479bee099/app/src/main/java/ch/threema/localcrypto/MasterKey.java#L411
-     * @param masterKey the used Master Key
+     *
+     * @param masterKey  the used Master Key
      * @param initVector first 16 byte of encrypted file (random bytes)
      * @return the Cipher to decrypt the file
      */
@@ -164,20 +105,37 @@ public class CryptUtils {
     }
 
     /**
+     * calculates the checksum for a decrypted master key
+     * @param key decrypted master key bytes
+     * @return first 4 bytes of SHA1 hash (can be compared to last 4 bytes of key.dat, see {@link MasterKey})
+     */
+    public static String calcPassphraseChecksum(byte[] key) {
+
+        MessageDigest sha1 = null;
+        try {
+            sha1 = MessageDigest.getInstance("SHA-1");
+        } catch (NoSuchAlgorithmException e) {
+            // won't happen
+            e.printStackTrace();
+        }
+        sha1.update(key);
+
+        return new String(sha1.digest(), 0, 4);
+
+    }
+
+    /**
      * get the SHA256-hash for a string
      */
     public static byte[] sha256(String input) {
-        MessageDigest messageDigest = null;
+        MessageDigest sha256 = null;
         try {
-            messageDigest = MessageDigest.getInstance("SHA-256");
+            sha256 = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             //won't happen
             e.printStackTrace();
         }
-        if (messageDigest != null) {
-            messageDigest.update(input.getBytes());
-            return messageDigest.digest();
-        }
-        return null;
+        sha256.update(input.getBytes());
+        return sha256.digest();
     }
 }

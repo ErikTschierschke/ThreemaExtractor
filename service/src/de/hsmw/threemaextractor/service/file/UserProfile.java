@@ -31,9 +31,9 @@ public class UserProfile {
     /**
      * parse information from app preferences file
      *
-     * @param appPreferencesFile app preferences file (see {@link FileStore#preferencesFile()})
+     * @param appPreferencesFile app preferences file (see {@link FileStore#getPreferencesFile()})
      * @param masterKey          master key
-     * @param mediaDir           media directory (see {@link FileStore#mediaDir()})
+     * @param mediaDir           media directory (see {@link FileStore#getMediaDir()})
      */
     public UserProfile(File appPreferencesFile, MasterKey masterKey, File mediaDir) {
 
