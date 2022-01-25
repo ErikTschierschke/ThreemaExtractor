@@ -5,6 +5,7 @@ import de.hsmw.threemaextractor.service.main.CryptUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 /**
  * represents master key from {@code key.dat}
@@ -16,11 +17,11 @@ public class MasterKey {
     /**
      * Loads and deobfuscates master key from {@code key.dat}
      */
-    public MasterKey(File masterKeyFile) {
+    public MasterKey(File masterKeyFile, String passphrase) {
 
         try {
-            key = CryptUtils.readKeyFromFile(masterKeyFile);
-        } catch (IOException e) {
+            key = CryptUtils.readKeyFromFile(masterKeyFile, passphrase);
+        } catch (IOException | GeneralSecurityException e) {
             System.err.println("ERROR READING MASTER KEY.");
             e.printStackTrace();
         }
@@ -38,4 +39,5 @@ public class MasterKey {
     public byte[] getKey() {
         return key;
     }
+
 }

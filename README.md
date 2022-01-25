@@ -1,6 +1,6 @@
 # ThreemaExtractor
 
-ThreemaExtractor is a extension for the [Mobile Network Analyzer (MoNA)](http://www.bioforscher.de/FoSIL/ippb9076rp8sityx/manager/pages/php/en/software/description/MoNA.php) project.
+ThreemaExtractor is an extension for the [Mobile Network Analyzer (MoNA)](http://www.bioforscher.de/FoSIL/ippb9076rp8sityx/manager/pages/php/en/software/description/MoNA.php) project.
 It provides an Eclipse e4 service that decrypts and parses forensic artefacts from the Threema app for Android devices.
 
 ## Dependencies

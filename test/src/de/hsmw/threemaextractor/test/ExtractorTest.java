@@ -23,7 +23,7 @@ public class ExtractorTest implements IApplication {
 
 
         FileStore fileStore = new FileStore(
-                "res/delete/key.dat", "res/delete/threema4.db", "res/delete/ch.threema.app_preferences.xml", "res/delete/data/", "out/");
+                "res/delete/key.dat", "res/delete/threema4.db", "res/delete/ch.threema.app_preferences.xml", "res/delete/data/", "out/delete");
 
         ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore);
 
@@ -54,7 +54,7 @@ public class ExtractorTest implements IApplication {
             System.out.println(ballot);
         }
 
-        System.out.println(new MasterKey(new File("res/key.dat")).getDatabaseKey());
+        System.out.println(new MasterKey(new File("res/delete/key.dat"), null).getDatabaseKey());
         return IApplication.EXIT_OK;
     }
 
