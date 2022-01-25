@@ -90,10 +90,14 @@ public class MasterKey {
         return protectionFlag != 0;
     }
 
+    /**
+     * sets a passphrase to decrypt the master key, verifies if passphrase is correct
+     * @return <b>true</b> if passphrase is correct and decryption was successful, <b>false</b> else
+     */
     public boolean setPassphrase(String passphrase) {
 
         if (protectionFlag == 0) {
-            // no passphrase used, do nothing
+            // no passphrase needed, do nothing
             return true;
         }
 
