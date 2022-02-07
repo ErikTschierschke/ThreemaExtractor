@@ -78,7 +78,6 @@ public class UserProfile {
         try {
             userAvatar = new Avatar(Avatar.getContactAvatarFile(mediaDir, identity, true), masterKey);
         } catch (IOException e) {
-            System.out.println("[WARNING] User avatar not found. It was either deleted or the user has no avatar set.");
             userAvatar = null;
         }
     }

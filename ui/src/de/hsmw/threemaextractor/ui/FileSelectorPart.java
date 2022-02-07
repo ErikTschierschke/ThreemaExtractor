@@ -3,10 +3,12 @@ package de.hsmw.threemaextractor.ui;
 import de.hsmw.threemaextractor.service.file.MainDatabase;
 import de.hsmw.threemaextractor.service.main.ChatVisualizer;
 import de.hsmw.threemaextractor.service.main.FileStore;
-import de.hsmw.threemaextractor.service.main.FileStore.CheckResult;
 import de.hsmw.threemaextractor.service.main.ThreemaExtractor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FormAttachment;
@@ -16,6 +18,7 @@ import org.eclipse.swt.widgets.*;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+
 import java.io.File;
 
 public class FileSelectorPart {
@@ -27,6 +30,8 @@ public class FileSelectorPart {
 
 
     private boolean firstSelectionDone = false;
+    
+    private Button extractButton;
 
     @Inject
     public FileSelectorPart() {
@@ -132,7 +137,8 @@ public class FileSelectorPart {
         outDirSelect.setLayoutData(fd_outDirSelect);
         outDirSelect.setText("Auswählen");
 
-        Button extractButton = new Button(parent, SWT.NONE);
+        extractButton = new Button(parent, SWT.NONE);
+        extractButton.setEnabled(false);
         FormData fd_extractButton = new FormData();
         fd_extractButton.bottom = new FormAttachment(100, -31);
         fd_extractButton.right = new FormAttachment(100, -10);
@@ -251,34 +257,60 @@ public class FileSelectorPart {
                         checkFileMissing(databasePath.getText(), false) ||
                         checkFileMissing(preferencesPath.getText(), false) ||
                         checkFileMissing(mediaDirPath.getText(), true) ||
-                        checkFileMissing(outDirPath.getText(), true) ||
-                        checkMasterKeyEncrypted(masterKeyPath.getText())) {
+                        checkFileMissing(outDirPath.getText(), true)) {
                     return;
                 }
 
                 FileStore fileStore = new FileStore(masterKeyPath.getText(), databasePath.getText(), preferencesPath.getText(),
                         mediaDirPath.getText(), outDirPath.getText());
-
-                ThreemaExtractor extractor = new ThreemaExtractor(fileStore);
-                //TODO somehow export this object
-
-                // display a direct chat for testing
-                MainDatabase database = extractor.getMainDatabase();
-                ChatVisualizer chatVisualizer = new ChatVisualizer(database.getContacts(), false, false);
-
-                System.out.println(chatVisualizer.visualizeConversation(database.getDirectMessages().getAll(), "XNYZKFYJ"));
-
+                
+                // check if passphrase is required
+                if (fileStore.masterKeyNeedsPassphrase()) {
+					PassphraseDialog passphraseDialog = new PassphraseDialog(new Shell() , fileStore, false);
+					int result = passphraseDialog.open();
+					
+					if (result == Window.OK) {
+						startExtraction(fileStore);
+					}
+				} else {
+					startExtraction(fileStore);
+				}
+               
                 parent.getShell().close();
             }
         });
+        
+        
+        // set text modify listeners to toggle extract button activation
+        ModifyListener changeListener = new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				checkAllSelected();
+			}
+		};
+		
+        masterKeyPath.addModifyListener(changeListener);
+        databasePath.addModifyListener(changeListener);
+        preferencesPath.addModifyListener(changeListener);
+        mediaDirPath.addModifyListener(changeListener);
+        outDirPath.addModifyListener(changeListener);
 
+    }
+    
+    private void startExtraction(FileStore fileStore) {
+    	ThreemaExtractor extractor = new ThreemaExtractor(fileStore);
+        MainDatabase database = extractor.getMainDatabase();
+        ChatVisualizer chatVisualizer = new ChatVisualizer(extractor.getUserProfile().getNickname(), database.getContacts(), false, false);
+
+        System.out.println(chatVisualizer.visualizeConversation(database.getDirectMessages().getByIdentity("XNYZKFYJ")));
     }
 
     private boolean checkFileMissing(String path, boolean isDir) {
 
         String object = isDir ? "Verzeichnis" : "Datei";
 
-        if (FileStore.checkFile(path) == CheckResult.MISSING) {
+        if (!FileStore.checkFilePresent(path)) {
             MessageDialog.openWarning(new Shell(),
                     "Fehler",
                     object + " " + path + " wurde nicht gefunden.");
@@ -286,19 +318,26 @@ public class FileSelectorPart {
         }
         return false;
     }
-
-    private boolean checkMasterKeyEncrypted(String path) {
-
-        if (FileStore.checkMasterkeyFile(path) == CheckResult.MASTERKEY_ENCRYPTED) {
-            MessageDialog.openWarning(new Shell(),
-                    "Fehler",
-                    "Masterkey ist mit einer Passphrase verschlüsselt.");
-            return true;
-        }
-        return false;
+    
+    
+    /**
+     * checks if all paths are selected - if so activates the start button
+     */
+    private void checkAllSelected() {
+    	if (!masterKeyPath.getText().isEmpty() && 
+    		!databasePath.getText().isEmpty() &&
+    		!preferencesPath.getText().isEmpty() &&
+    		!mediaDirPath.getText().isEmpty() &&
+    		!outDirPath.getText().isEmpty()) {
+    		extractButton.setEnabled(true);
+		} else {
+			extractButton.setEnabled(false);
+		}
     }
 
-    // if the first file is selected, automatically set others
+    /**
+     * if the first file from the app directory is selected, try to find the others automatically
+     */
     private void handleFirstSelection(String path, Text setTextBox) {
 
         // only run on first file selected
@@ -313,13 +352,13 @@ public class FileSelectorPart {
         File defaultDatabasePath = new File(appDataDir + "/databases/threema4.db");
         File defaultPreferencesPath = new File(appDataDir + "/shared_prefs/ch.threema.app_preferences.xml");
 
-        if (masterKeyPath != setTextBox && FileStore.checkFile(defaultMasterKeyPath.getAbsolutePath()) == CheckResult.OK) {
+        if (masterKeyPath != setTextBox && FileStore.checkFilePresent(defaultMasterKeyPath.getAbsolutePath())) {
             masterKeyPath.setText(defaultMasterKeyPath.getAbsolutePath());
         }
-        if (databasePath != setTextBox && FileStore.checkFile(defaultDatabasePath.getAbsolutePath()) == CheckResult.OK) {
+        if (databasePath != setTextBox && FileStore.checkFilePresent(defaultDatabasePath.getAbsolutePath())) {
             databasePath.setText(defaultDatabasePath.getAbsolutePath());
         }
-        if (preferencesPath != setTextBox && FileStore.checkFile(defaultPreferencesPath.getAbsolutePath()) == CheckResult.OK) {
+        if (preferencesPath != setTextBox && FileStore.checkFilePresent(defaultPreferencesPath.getAbsolutePath())) {
             preferencesPath.setText(defaultPreferencesPath.getAbsolutePath());
         }
     }

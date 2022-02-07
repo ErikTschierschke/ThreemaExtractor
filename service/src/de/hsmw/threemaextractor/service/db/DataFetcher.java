@@ -251,7 +251,7 @@ public class DataFetcher {
             try {
                 avatarFile = new Avatar(Avatar.getGroupAvatarFile(mediaDir, id), masterKey);
             } catch (IOException e) {
-                System.out.println("[WARNING] Avatar for group\"" + groupsResults.getString("name") + "\" was not found." +
+                System.out.println("[WARNING] Avatar for group \"" + groupsResults.getString("name") + "\" was not found." +
                         " The file was either deleted or the group has no avatar set.");
             }
 
