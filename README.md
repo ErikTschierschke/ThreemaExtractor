@@ -13,7 +13,7 @@ It provides an Eclipse e4 service that decrypts and parses forensic artefacts fr
 
 ### Initialization
 The service entry point is the [`ThreemaExtractor`](https://eriktschierschke.github.io/Softwareprojekt-e4/javadoc/de/hsmw/threemaextractor/service/main/ThreemaExtractor.html) class.
-To initialize it a [`FileStore`](https://eriktschierschke.github.io/Softwareprojekt-e4/javadoc/de/hsmw/threemaextractor/service/main/FileStore.html) object must be built. This class takes the paths of the collected artifacts, checks if they are valid and if the master key is encrypted with a passphrase.
+To initialize it a [`FileStore`](https://eriktschierschke.github.io/Softwareprojekt-e4/javadoc/de/hsmw/threemaextractor/service/main/FileStore.html) object must be built. This class takes the paths of the collected artifacts and checks if they are valid.
 
 ```java
 FileStore fileStore = new FileStore("[path to key.dat]",
@@ -21,11 +21,25 @@ FileStore fileStore = new FileStore("[path to key.dat]",
                                     "[path to ch.threema.app_preferences.xml]",
                                     "[path to media directory (data/files/)]",
                                     "[output directoy for decrypted media]");
-
-ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore);
 ```
 
-**The `de.hsmw.threemaextractor.ui` plugin contains a UI application that can be used to perform this initialization.**
+If one of the provided paths doesn’t exist or is not readable a `IOException` is thrown. The paths can be checked with [`FileStore.checkFilePresent(String path)`](https://eriktschierschke.github.io/Softwareprojekt-e4/javadoc/de/hsmw/threemaextractor/service/main/FileStore.html#checkFilePresent(java.lang.String)).
+
+#### Passphrases
+
+The master key may be protected by a user-specified passphrase. Run [`FileStore.masterKeyNeedsPassphrase()`](https://eriktschierschke.github.io/Softwareprojekt-e4/javadoc/de/hsmw/threemaextractor/service/main/FileStore.html#masterKeyNeedsPassphrase()) to check if a passphrase is required. If the passphrase is known it can be passed to the [`FileStore.setPassphrase(String passphrase)`](https://eriktschierschke.github.io/Softwareprojekt-e4/javadoc/de/hsmw/threemaextractor/service/main/FileStore.html#setPassphrase(java.lang.String)) method. The return value is `true` if the passphrase is correct and the master key can be decrypted.
+
+
+
+The built `FileStore` can than be passed to the `ThreemaExtractor` class to start the extraction.
+
+```java
+ThreemaExtractor threemaExtractor = new ThreemaExtractor(fileStore)
+```
+
+
+
+> **The `de.hsmw.threemaextractor.ui` plugin contains a UI application that can be used to perform this initialization.**
 
 ### Utilizing the parsed data
 

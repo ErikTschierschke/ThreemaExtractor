@@ -31,7 +31,6 @@ public class MasterKey {
      * Loads and deobfuscates master key from {@code key.dat}<p>
      *
      * @param masterKeyFile the key.dat file
-     * @throws IOException if an error occurs reading the file, check with {@link FileStore#checkFilePresent(String)} first
      */
     public MasterKey(File masterKeyFile) {
 

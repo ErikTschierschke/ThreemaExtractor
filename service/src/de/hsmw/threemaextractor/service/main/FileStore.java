@@ -20,13 +20,14 @@ public final class FileStore {
     /**
      * initialize FileStore by given path strings
      * <p>
-     * to prevent errors, check files first with {@link FileStore#checkFilePresent(String)}
      *
      * @param masterKeyPath   path to master key file ({@code [ANDROID APP DIR]/ch.threema.app/files/key.dat})
      * @param databasePath    path to main database file ({@code [ANDROID APP DIR]/ch.threema.app/databases/threema4.db})
      * @param preferencesPath path to app preferences file ({@code [ANDROID APP DIR]/ch.threema.app/shared_prefs/ch.threema.app_preferences.xml})
      * @param mediaDir        media path ({@code [ANDROID MEDIA DIR]/ch.threema.app/files/data/})
      * @param outputDir       path where decrypted files should be saved
+     *                        
+     * @throws IOException if a path does not exist or is not readable. - Paths can be checked with {@link #checkFilePresent(String)}
      */
     public FileStore(String masterKeyPath, String databasePath, String preferencesPath, String mediaDir, String outputDir) throws IOException {
 
@@ -85,7 +86,7 @@ public final class FileStore {
     }
 
     /**
-     * @return <b>true</b> if a file is present and readable, <false>else</false>
+     * @return <b>true</b> if a file is present and readable, <b>false</b> else
      */
     public static boolean checkFilePresent(String path) {
         File file = new File(path);
