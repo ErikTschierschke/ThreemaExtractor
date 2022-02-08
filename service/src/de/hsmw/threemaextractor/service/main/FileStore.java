@@ -3,6 +3,7 @@ package de.hsmw.threemaextractor.service.main;
 import de.hsmw.threemaextractor.service.file.MasterKey;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * utility class for checking and storing file locations
@@ -27,9 +28,19 @@ public final class FileStore {
      * @param mediaDir        media path ({@code [ANDROID MEDIA DIR]/ch.threema.app/files/data/})
      * @param outputDir       path where decrypted files should be saved
      */
-    public FileStore(String masterKeyPath, String databasePath, String preferencesPath, String mediaDir, String outputDir) {
+    public FileStore(String masterKeyPath, String databasePath, String preferencesPath, String mediaDir, String outputDir) throws IOException {
 
         masterKey = new MasterKey(new File(masterKeyPath));
+
+
+        // throw IOException if a path is incorrect
+        if (!(checkFilePresent(masterKeyPath) &&
+                checkFilePresent(databasePath) &&
+                checkFilePresent(preferencesPath) &&
+                checkFilePresent(mediaDir) &&
+                checkFilePresent(outputDir))) {
+            throw new IOException("[ERROR] One of the provided paths was incorrect!");
+        }
 
         databaseFile = new File(databasePath);
         preferencesFile = new File(preferencesPath);
@@ -74,7 +85,7 @@ public final class FileStore {
     }
 
     /**
-     * check if a file is present and readable
+     * @return <b>true</b> if a file is present and readable, <false>else</false>
      */
     public static boolean checkFilePresent(String path) {
         File file = new File(path);

@@ -66,7 +66,7 @@ public PassphraseDialog(Shell parentShell, FileStore fileStore, boolean passphra
 		} else {
             MessageDialog.openWarning(getParentShell().getShell(),
                     "Fehler",
-                    "Die eingegebene Passphrase ist nicht korrekt." + passphraseText.getText());
+                    "Die eingegebene Passphrase ist nicht korrekt.");
 		}
     }
     

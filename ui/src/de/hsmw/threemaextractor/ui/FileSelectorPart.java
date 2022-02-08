@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import java.io.File;
+import java.io.IOException;
 
 public class FileSelectorPart {
     private Text masterKeyPath;
@@ -261,10 +262,12 @@ public class FileSelectorPart {
                     return;
                 }
 
-                FileStore fileStore = new FileStore(masterKeyPath.getText(), databasePath.getText(), preferencesPath.getText(),
-                        mediaDirPath.getText(), outDirPath.getText());
-                
-                // check if passphrase is required
+                FileStore fileStore;
+				try {
+					fileStore = new FileStore(masterKeyPath.getText(), databasePath.getText(), preferencesPath.getText(),
+					        mediaDirPath.getText(), outDirPath.getText());
+					
+				// check if passphrase is required
                 if (fileStore.masterKeyNeedsPassphrase()) {
 					PassphraseDialog passphraseDialog = new PassphraseDialog(new Shell() , fileStore, false);
 					int result = passphraseDialog.open();
@@ -275,6 +278,12 @@ public class FileSelectorPart {
 				} else {
 					startExtraction(fileStore);
 				}
+				} catch (IOException exception) {
+					// won't happen, files are already checked
+					exception.printStackTrace();
+				}
+                
+                
                
                 parent.getShell().close();
             }
