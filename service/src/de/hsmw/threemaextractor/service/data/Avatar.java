@@ -32,26 +32,6 @@ public class Avatar {
     }
 
     /**
-     * @return the avatar as {@code RenderedImage}
-     */
-    public RenderedImage getAvatar() {
-        return avatar;
-    }
-
-    /**
-     * writes the avatar to a specific jpg file
-     *
-     * @param outputDir the output dir
-     * @param fileName  the file name (excluding {@code .jpg})
-     * @throws IOException if the file couldn't be created
-     */
-    public void writeToFile(File outputDir, String fileName) throws IOException {
-        File outFile = new File(outputDir, fileName + ".jpg");
-        outFile.getParentFile().mkdirs();
-        ImageIO.write(avatar, "jpg", outFile);
-    }
-
-    /**
      * returns the associated encrypted file of a contact avatar
      *
      * @param mediaDir media dir (see {@link FileStore#getMediaDir()})
@@ -87,5 +67,25 @@ public class Avatar {
             throw new FileNotFoundException();
         }
         return file;
+    }
+
+    /**
+     * @return the avatar as {@code RenderedImage}
+     */
+    public RenderedImage getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * writes the avatar to a specific jpg file
+     *
+     * @param outputDir the output dir
+     * @param fileName  the file name (excluding {@code .jpg})
+     * @throws IOException if the file couldn't be created
+     */
+    public void writeToFile(File outputDir, String fileName) throws IOException {
+        File outFile = new File(outputDir, fileName + ".jpg");
+        outFile.getParentFile().mkdirs();
+        ImageIO.write(avatar, "jpg", outFile);
     }
 }

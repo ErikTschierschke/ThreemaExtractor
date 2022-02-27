@@ -41,7 +41,7 @@ public class UserProfile {
         String appPreferences = null;
         Document document = null;
         try {
-            // threema safe hash contains illegal XML chars, remove it
+            // threema safe hash may contain illegal XML chars but is not needed, remove it
             appPreferences = Files.readString(appPreferencesFile.toPath())
                     .replaceAll("(.*(pref_threema_safe_hash_string).*)", "");
 

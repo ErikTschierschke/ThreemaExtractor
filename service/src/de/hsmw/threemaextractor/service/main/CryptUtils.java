@@ -106,6 +106,7 @@ public class CryptUtils {
 
     /**
      * calculates the checksum for a decrypted master key
+     *
      * @param key decrypted master key bytes
      * @return first 4 bytes of SHA1 hash (can be compared to last 4 bytes of key.dat, see {@link MasterKey})
      */

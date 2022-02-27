@@ -12,14 +12,14 @@ import java.util.Date;
 public interface IMessage extends Comparable<IMessage> {
 
     /**
-     * <i>(automaticly implemented by record classes)</i>
+     * <i>(automatically implemented by the message type data records)</i>
      *
      * @return the message's UID from the database
      */
     String uid();
 
     /**
-     * <i>(automaticly implemented by record classes)</i>
+     * <i>(automatically implemented by the message type data records)</i>
      *
      * @return in <b>direct chats</b>: Threema ID of the chat partner<p>
      * in <b>groups</b>: Threema ID of the message sender, <b>null</b> if message is outgoing
@@ -27,7 +27,7 @@ public interface IMessage extends Comparable<IMessage> {
     String identity();
 
     /**
-     * <i>(automaticly implemented by record classes)</i>
+     * <i>(automatically implemented by the message type data records)</i>
      *
      * @return whether the message was sent by the user
      */
@@ -36,21 +36,21 @@ public interface IMessage extends Comparable<IMessage> {
     //TODO fix javadoc for timestamps
 
     /**
-     * <i>(automaticly implemented by record classes)</i>
+     * <i>(automatically implemented by the message type data records)</i>
      *
      * @return timestamp when the message was sent, <b>null</b> if message wasn't sent
      */
     Date utcSent();
 
     /**
-     * <i>(automaticly implemented by record classes)</i>
+     * <i>(automatically implemented by the message type data records)</i>
      *
      * @return timestamp when the message was received
      */
     Date utcReceived();
 
     /**
-     * <i>(automaticly implemented by record classes)</i>
+     * <i>(automatically implemented by the message type data records)</i>
      *
      * @return timestamp when the message was read, <b>null</b> if message wasn't read
      */

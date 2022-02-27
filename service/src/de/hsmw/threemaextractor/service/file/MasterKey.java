@@ -2,7 +2,6 @@ package de.hsmw.threemaextractor.service.file;
 
 import de.hsmw.threemaextractor.service.lib.ThreemaLib;
 import de.hsmw.threemaextractor.service.main.CryptUtils;
-import de.hsmw.threemaextractor.service.main.FileStore;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -91,6 +90,7 @@ public class MasterKey {
 
     /**
      * sets a passphrase to decrypt the master key, verifies if passphrase is correct
+     *
      * @return <b>true</b> if passphrase is correct and decryption was successful, <b>false</b> else
      */
     public boolean setPassphrase(String passphrase) {

@@ -6,6 +6,9 @@ import java.io.ByteArrayInputStream;
 
 public class JsonUtils {
 
+    /**
+     * parses the JSON arrays stored in the body column of some messages
+     */
     public static JsonArray parseJsonBody(String jsonBody) {
         return Json.createReader(new ByteArrayInputStream(jsonBody.getBytes())).readArray();
     }

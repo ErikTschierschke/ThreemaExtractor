@@ -26,7 +26,6 @@ public final class FileStore {
      * @param preferencesPath path to app preferences file ({@code [ANDROID APP DIR]/ch.threema.app/shared_prefs/ch.threema.app_preferences.xml})
      * @param mediaDir        media path ({@code [ANDROID MEDIA DIR]/ch.threema.app/files/data/})
      * @param outputDir       path where decrypted files should be saved
-     *                        
      * @throws IOException if a path does not exist or is not readable. - Paths can be checked with {@link #checkFilePresent(String)}
      */
     public FileStore(String masterKeyPath, String databasePath, String preferencesPath, String mediaDir, String outputDir) throws IOException {
@@ -48,6 +47,14 @@ public final class FileStore {
         this.mediaDir = new File(mediaDir);
         this.outputDir = new File(outputDir);
 
+    }
+
+    /**
+     * @return <b>true</b> if a file is present and readable, <b>false</b> else
+     */
+    public static boolean checkFilePresent(String path) {
+        File file = new File(path);
+        return file.exists() && file.canRead();
     }
 
     public MasterKey getMasterKey() {
@@ -79,17 +86,10 @@ public final class FileStore {
 
     /**
      * try to set the passphrase to unlock the master key
+     *
      * @return <b>true</b> if passphrase is correct, <b>else</b>
      */
     public boolean setPassphrase(String passphrase) {
         return masterKey.setPassphrase(passphrase);
-    }
-
-    /**
-     * @return <b>true</b> if a file is present and readable, <b>false</b> else
-     */
-    public static boolean checkFilePresent(String path) {
-        File file = new File(path);
-        return file.exists() && file.canRead();
     }
 }

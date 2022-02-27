@@ -80,7 +80,6 @@ public class ChatVisualizer {
                     System.out.println(t.text());
                 }
                 msg = "[" + getContactName(message.identity()) + " - " + dateFormat.format(message.utcReceived()) + "]\n";
-                System.out.println("SUCCESS");
             }
 
         }

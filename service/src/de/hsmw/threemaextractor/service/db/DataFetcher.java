@@ -24,6 +24,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeSet;
 
+/**
+ * automatically fetches all available data from the database
+ */
 public class DataFetcher {
 
     private final Connection connection;
@@ -36,6 +39,19 @@ public class DataFetcher {
     private final MasterKey masterKey;
     private final File mediaDir;
 
+    /**
+     * initialize the DataFetcher by passing a SQL connection to the database, the master key and (at best empty)
+     * object stores
+     *
+     * @param connection            a {@code Connection} to the Threema database
+     * @param contactStore
+     * @param messageStore
+     * @param groupStore
+     * @param distributionListStore
+     * @param ballotStore
+     * @param masterKey             the master key for the database
+     * @param mediaDir              the media directory
+     */
     public DataFetcher(Connection connection, ContactStore contactStore, DirectMessageStore messageStore, GroupStore groupStore,
                        DistributionListStore distributionListStore, BallotStore ballotStore,
                        MasterKey masterKey, File mediaDir) {
@@ -49,6 +65,9 @@ public class DataFetcher {
         this.mediaDir = mediaDir;
     }
 
+    /**
+     * fetches all available data
+     */
     public void fetchAll() throws SQLException {
 
         fetchContacts();
@@ -96,6 +115,9 @@ public class DataFetcher {
         }
     }
 
+    /**
+     * fetches available direct messages from the message table
+     */
     public void fetchDirectMessages() throws SQLException {
 
         ResultSet results = connection.createStatement().executeQuery(Query.GET_ALL_MESSAGES);
@@ -108,7 +130,9 @@ public class DataFetcher {
         IMessage message = null;
 
         while (results.next()) {
-//TODO document
+            // switch message class by type code
+            // (see https://github.com/threema-ch/threema-android/blob/bfdef5ff49447f587c6f99008a01bf6a394a9fa2/app/src/main/java/ch/threema/storage/models/MessageType.java#L24)
+            // (some types are no longer used)
             switch (results.getInt("type")) {
                 case 0 -> message = fetchTextMessage(results);
                 case 4 -> message = fetchLocationMessage(results);
@@ -225,7 +249,7 @@ public class DataFetcher {
     }
 
     /**
-     * fetches group data from database
+     * fetches group data from m_group, m_group_message and group_member tables
      */
     public void fetchGroups() throws SQLException {
 
@@ -268,7 +292,7 @@ public class DataFetcher {
     }
 
     /**
-     * fetch distribution lists
+     * fetch distribution lists from distribution_list, distribution_list_member and distribution_list_message tables
      */
     public void fetchDistributionLists() throws SQLException {
 
@@ -298,7 +322,7 @@ public class DataFetcher {
     }
 
     /**
-     * fetch ballots
+     * fetch ballots from ballot, ballot_choice and ballot_vote tables
      */
     public void fetchBallots() throws SQLException {
 

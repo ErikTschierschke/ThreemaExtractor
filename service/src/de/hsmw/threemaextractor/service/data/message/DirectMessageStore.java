@@ -15,6 +15,7 @@ public class DirectMessageStore {
      * set the stored messages
      *
      * @param messageSet all direct messages as {@code TreeSet<IMessage>}
+     * @hidden
      */
     public void setMessages(TreeSet<IMessage> messageSet) {
 
